@@ -876,6 +876,97 @@ h1 {
   text-transform: uppercase;
 }
 
+/* === Quiz === */
+.quiz-item {
+  background: var(--paper-2);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 16px 18px 14px;
+  margin-bottom: 12px;
+}
+.quiz-q {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.quiz-options {
+  display: grid;
+  gap: 6px;
+}
+.quiz-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  text-align: left;
+  background: var(--paper);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 0.94rem;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+.quiz-option:hover:not(:disabled) {
+  border-color: var(--accent-soft);
+  background: var(--accent-tint);
+}
+.quiz-option:disabled { cursor: default; opacity: 0.85; }
+.quiz-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--paper-3);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  flex-shrink: 0;
+}
+.quiz-option.picked { border-color: var(--accent); }
+.quiz-option.correct-answer {
+  background: var(--sage-tint);
+  border-color: var(--sage);
+}
+.quiz-option.correct-answer .quiz-letter { background: var(--sage); color: #fff; }
+.quiz-option.wrong-pick {
+  background: rgba(160, 86, 97, 0.08);
+  border-color: var(--accent);
+}
+.quiz-option.wrong-pick .quiz-letter { background: var(--accent); color: #fff; }
+.quiz-feedback {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: var(--paper);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+}
+.quiz-verdict {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+.quiz-explain { font-size: 0.94rem; }
+.quiz-source {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-soft);
+  font-size: 0.86rem;
+  color: var(--ink-mute);
+}
+.quiz-score {
+  padding: 10px 14px;
+  background: var(--accent-tint);
+  border-radius: 8px;
+  border: 1px solid var(--accent-soft);
+}
+
 @media (max-width: 720px) {
   .container { padding: 28px 16px 60px; }
   .header { flex-direction: column; align-items: stretch; }
@@ -934,6 +1025,7 @@ state.stats = state.stats || {};
 state.stats.tabOpens = state.stats.tabOpens || {};
 state.stats.sectionOpens = state.stats.sectionOpens || {};
 state.stats.lastVisit = state.stats.lastVisit || {};
+state.quiz = state.quiz || {};  // shape: state.quiz[areaSlug][qIndex] = { picked, correct }
 
 function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
@@ -1111,6 +1203,43 @@ function renderTemplatesSection(area) {
   return sectionShell("Drafting Templates", area.templates.length, items, false);
 }
 
+function renderQuizSection(area) {
+  if (!area.quiz || !area.quiz.length) return "";
+  const items = area.quiz.map((q, i) => {
+    const optsHTML = q.options.map((opt, oi) =>
+      '<button class="quiz-option" data-area="' + escapeHTML(area.slug) + '" data-q="' + i + '" data-opt="' + oi + '">' +
+        '<span class="quiz-letter">' + String.fromCharCode(65 + oi) + '</span>' +
+        '<span class="quiz-opt-text">' + opt + '</span>' +
+      '</button>'
+    ).join("");
+    return '<div class="quiz-item" data-correct="' + q.correct + '" id="quiz-' + escapeHTML(area.slug) + '-' + i + '">' +
+      '<div class="quiz-q">Q' + (i + 1) + '. ' + q.q + '</div>' +
+      '<div class="quiz-options">' + optsHTML + '</div>' +
+      '<div class="quiz-feedback" style="display:none;">' +
+        '<div class="quiz-verdict"></div>' +
+        '<div class="quiz-explain article-body">' + q.explain + '</div>' +
+        '<div class="quiz-source"><strong>Source:</strong> ' + escapeHTML(q.source) + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join("");
+  const score = '<div class="quiz-score" data-area="' + escapeHTML(area.slug) + '" style="margin-bottom:12px;font-size:0.95rem;color:var(--ink-soft);"></div>';
+  return sectionShell("Self-Test (MCQs)", area.quiz.length, score + items, false);
+}
+
+function renderFAQSection(area) {
+  if (!area.faqs || !area.faqs.length) return "";
+  const items = area.faqs.map((f, i) =>
+    '<details class="material-item" id="faq-' + escapeHTML(area.slug) + '-' + i + '">' +
+      '<summary>' +
+        '<div class="material-item-title">' + escapeHTML(f.q) + '</div>' +
+        '<div class="material-item-summary">' + escapeHTML(f.source) + (f.ref ? ' &middot; ' + escapeHTML(f.ref) : '') + '</div>' +
+      '</summary>' +
+      '<div class="material-item-body article-body">' + f.a + '</div>' +
+    '</details>'
+  ).join("");
+  return sectionShell("FAQ (from official sources)", area.faqs.length, items, false);
+}
+
 function renderExamplesSection(area) {
   if (!area.examples || !area.examples.length) return "";
   const items = area.examples.map(ex =>
@@ -1153,6 +1282,8 @@ function renderPanels() {
       renderTopicsSection(a) +
       renderDeepDiveSection(a) +
       renderExamplesSection(a) +
+      renderQuizSection(a) +
+      renderFAQSection(a) +
       renderMaterialsSection(a) +
       renderTemplatesSection(a) +
       renderBooksSection(a) +
@@ -1217,6 +1348,25 @@ function flushPendingNotes() {
   if (notesEl && state.notes !== notesEl.value) {
     state.notes = notesEl.value;
     save();
+  }
+}
+
+function updateQuizScore(areaSlug) {
+  const scoreEl = document.querySelector('.quiz-score[data-area="' + areaSlug + '"]');
+  if (!scoreEl) return;
+  const area = AREAS.find(a => a.slug === areaSlug);
+  if (!area || !area.quiz) return;
+  const total = area.quiz.length;
+  const answered = state.quiz[areaSlug] ? Object.keys(state.quiz[areaSlug]).length : 0;
+  let correctCount = 0;
+  if (state.quiz[areaSlug]) {
+    Object.values(state.quiz[areaSlug]).forEach(r => { if (r.correct) correctCount++; });
+  }
+  if (answered === 0) {
+    scoreEl.innerHTML = '<em>No answers yet. Pick an option below to begin.</em>';
+  } else {
+    const pct = Math.round((correctCount / answered) * 100);
+    scoreEl.innerHTML = '<strong>Score:</strong> ' + correctCount + ' / ' + answered + ' answered (' + pct + '%) &middot; ' + (total - answered) + ' remaining';
   }
 }
 
@@ -1431,6 +1581,64 @@ function attachHandlers() {
   // Glossary search
   const glossarySearch = document.getElementById("glossary-search");
   if (glossarySearch) glossarySearch.addEventListener("input", renderGlossary);
+
+  // Quiz option clicks
+  document.querySelectorAll('.quiz-option').forEach(btn => {
+    btn.addEventListener("click", () => {
+      const area = btn.dataset.area;
+      const qIdx = parseInt(btn.dataset.q, 10);
+      const optIdx = parseInt(btn.dataset.opt, 10);
+      const item = document.getElementById("quiz-" + area + "-" + qIdx);
+      const correct = parseInt(item.dataset.correct, 10);
+      const isCorrect = optIdx === correct;
+      // Record state
+      state.quiz[area] = state.quiz[area] || {};
+      state.quiz[area][qIdx] = { picked: optIdx, correct: isCorrect };
+      save();
+      // Visual feedback
+      item.querySelectorAll('.quiz-option').forEach((b, bi) => {
+        b.disabled = true;
+        b.classList.remove("picked", "correct-answer", "wrong-pick");
+        if (bi === correct) b.classList.add("correct-answer");
+        if (bi === optIdx && !isCorrect) b.classList.add("wrong-pick");
+        if (bi === optIdx) b.classList.add("picked");
+      });
+      const fb = item.querySelector('.quiz-feedback');
+      const verdict = item.querySelector('.quiz-verdict');
+      verdict.textContent = isCorrect ? "✓ Correct" : "✗ Not quite — see below.";
+      verdict.style.color = isCorrect ? "var(--sage)" : "var(--accent)";
+      fb.style.display = "block";
+      // Update score widget for this area
+      updateQuizScore(area);
+    });
+  });
+  // Initial: restore answered state visually + score
+  AREAS.forEach(a => {
+    if (!a.quiz || !a.quiz.length) return;
+    if (state.quiz[a.slug]) {
+      Object.keys(state.quiz[a.slug]).forEach(qIdxStr => {
+        const qIdx = parseInt(qIdxStr, 10);
+        const rec = state.quiz[a.slug][qIdx];
+        const item = document.getElementById("quiz-" + a.slug + "-" + qIdx);
+        if (!item) return;
+        const correct = parseInt(item.dataset.correct, 10);
+        item.querySelectorAll('.quiz-option').forEach((b, bi) => {
+          b.disabled = true;
+          if (bi === correct) b.classList.add("correct-answer");
+          if (bi === rec.picked && !rec.correct) b.classList.add("wrong-pick");
+          if (bi === rec.picked) b.classList.add("picked");
+        });
+        const fb = item.querySelector('.quiz-feedback');
+        const verdict = item.querySelector('.quiz-verdict');
+        if (fb && verdict) {
+          verdict.textContent = rec.correct ? "✓ Correct" : "✗ Not quite — see below.";
+          verdict.style.color = rec.correct ? "var(--sage)" : "var(--accent)";
+          fb.style.display = "block";
+        }
+      });
+    }
+    updateQuizScore(a.slug);
+  });
 
   // First-load population for glossary/stats so a direct hash link works
   renderGlossary();

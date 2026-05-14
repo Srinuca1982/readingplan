@@ -241,6 +241,155 @@ CONCEPTS = [
         ),
     },
     {
+        "tag": "Distribution",
+        "title": "Capital reduction vs Buyback — which is the right cash-return route?",
+        "summary": "Same economic effect (cash to shareholders, capital comes down), very different tax and procedural footprint.",
+        "body": (
+            "Both routes return cash to shareholders and reduce the company's capital base, but "
+            "the mechanics differ. <strong>Capital reduction</strong> requires NCLT approval (Sec 66) "
+            "with creditor protection; the payout up to accumulated profits is a deemed dividend "
+            "under <span class='sec'>Sec 2(22)(d)</span> (Anarkali Sarabhai), balance is return of "
+            "capital reducing the cost basis. <strong>Buyback</strong> under Sec 68 is faster (board "
+            "or shareholder resolution; no NCLT) but post-1 Oct 2024, the entire consideration is "
+            "deemed dividend in shareholder's hands. <strong>Choice depends on:</strong> (a) shareholder's "
+            "cost basis — high basis favours reduction (return-of-capital portion absorbed against "
+            "basis); (b) company's accumulated profits — low profits favour reduction (more of payout "
+            "is return of capital, not dividend); (c) urgency — buyback is faster; (d) creditor "
+            "consents — reduction needs them, buyback doesn't."
+        ),
+        "example": (
+            "<strong>Example.</strong> Acme has 1 crore shares, market price ₹200, paid-up capital "
+            "₹10 cr (FV ₹10), accumulated profits ₹50 cr, ₹100 cr cash to distribute. "
+            "<em>Buyback at ₹200</em> — 50 lakh shares bought back; ₹100 cr taxable as deemed dividend "
+            "(post-Oct 2024) in shareholders' hands at slab rate. "
+            "<em>Capital reduction by paying ₹50/share</em> — ₹50 cr (= attributable accumulated "
+            "profits) is deemed dividend; ₹50 cr is return of capital reducing shareholders' cost "
+            "basis. For a shareholder with high basis, the second is materially more tax-efficient."
+        ),
+        "hooks": (
+            "Capital reduction: <span class='sec'>Sec 66</span> Companies Act + "
+            "<span class='sec'>Sec 2(22)(d)</span> IT Act. Buyback: <span class='sec'>Sec 68–70</span> "
+            "Companies Act + <span class='sec'>Sec 2(22)</span> IT Act (post-Oct 2024). "
+            "Cost-of-acquisition adjustment: <span class='sec'>Sec 55(2)(v)</span>."
+        ),
+        "pitfalls": (
+            "Treating buyback and capital reduction as interchangeable. Post-Oct 2024, "
+            "buyback's regulatory simplicity (no NCLT, no creditor consents) is its only advantage — "
+            "the tax economics are now identical to or worse than capital reduction. Always model "
+            "both before committing."
+        ),
+    },
+    {
+        "tag": "Common control",
+        "title": "Common-control transactions — the carrying-value bypass",
+        "summary": "When the buyer and seller are under common control, fair-value gymnastics are explicitly excluded.",
+        "body": (
+            "Most business combinations under Ind AS 103 use the acquisition method — recognise "
+            "acquired net assets at fair value and book any excess consideration as goodwill. But "
+            "this gets absurd when the same group is reshuffling assets among its own entities: "
+            "fair valuing what was always yours just creates accounting volatility with no real "
+            "economic event. <strong>Ind AS 103 paragraph 2(c) excludes common-control transactions</strong>. "
+            "Appendix C prescribes the <strong>pooling-of-interests / carrying-value method</strong>: "
+            "assets and liabilities of the transferor are recognised in the transferee at their "
+            "existing carrying amounts. The difference between consideration and the net assets so "
+            "recognised goes to capital reserve. <strong>No goodwill, no bargain purchase, no FV "
+            "step-up.</strong>"
+        ),
+        "example": (
+            "<strong>Example.</strong> ParentCo holds 100% of SubA and SubB. SubA is merged into SubB. "
+            "SubA's net assets at carrying value = ₹100 cr; ParentCo's investment in SubA at cost = ₹80 cr. "
+            "SubB recognises SubA's assets at ₹100 cr carrying value. The consideration in SubB's "
+            "books is the cancellation of ParentCo's investment ₹80 cr. The ₹20 cr difference goes "
+            "to <em>Capital Reserve</em>. No P&L impact. No goodwill."
+        ),
+        "hooks": (
+            "<span class='sec'>Ind AS 103 paragraph 2(c)</span> exclusion; "
+            "<span class='sec'>Appendix C</span> common-control mergers method; tax treatment "
+            "still flows through <span class='sec'>Sec 2(1B)</span> if the merger meets those "
+            "conditions independently."
+        ),
+        "pitfalls": (
+            "Common-control transactions still need to satisfy <em>Sec 2(1B)</em> for tax neutrality "
+            "— pooling under Ind AS does not automatically secure tax-neutral treatment. The two "
+            "regimes have different conditions and run in parallel."
+        ),
+    },
+    {
+        "tag": "Distress",
+        "title": "IBC resolution plan vs Section 230 scheme — when to use which",
+        "summary": "Both can restructure a distressed company. The clean-slate doctrine is the killer differentiator.",
+        "body": (
+            "<strong>Section 230 scheme</strong> can be used to restructure a company at any time, "
+            "including during liquidation (Regulation 2B of Liquidation Process Regulations). It "
+            "binds those who voted and was sanctioned; statutory authorities and undisclosed claimants "
+            "<em>can still pursue claims</em>. <strong>IBC Resolution Plan</strong> under Sec 30–31, "
+            "approved by 66% of CoC and sanctioned by NCLT, carries the <strong>clean-slate doctrine</strong> "
+            "(Essar Steel, Vaibhav Goel) — <em>all undisclosed pre-CIRP claims are extinguished</em>, "
+            "including statutory dues. For a distressed-asset acquirer, this is the strongest "
+            "downside protection available in Indian law. Trade-off: IBC route requires the company "
+            "to be in default, the CIRP timeline is rigid (270/330 days), and the acquirer must "
+            "compete through a Resolution Applicant process."
+        ),
+        "example": (
+            "<strong>Example.</strong> Steel Co. has ₹10,000 cr debt, has defaulted, and has potential "
+            "₹2,000 cr in undisclosed tax/regulatory exposures. <em>Sec 230 scheme</em>: acquirer would "
+            "need to provide indemnification or carve-outs for these contingent liabilities, risk-"
+            "weighting purchase price. <em>IBC resolution plan</em>: the clean-slate doctrine "
+            "extinguishes all pre-CIRP claims not in the plan — acquirer can price the deal without "
+            "the ₹2,000 cr exposure. Net price impact for the acquirer: 20-25% discount."
+        ),
+        "hooks": (
+            "Sec 230 scheme during liquidation: Regulation 2B Liquidation Process Regulations 2016. "
+            "IBC clean slate: <span class='sec'>Sec 31</span> IBC; Essar Steel (SC 2019); "
+            "Vaibhav Goel (SC 2025); Electrosteel (SC 2025). Loss carry-forward: "
+            "<span class='sec'>Sec 79(2)(c)</span> IT Act."
+        ),
+        "pitfalls": (
+            "Using the IBC route purely to access the clean slate when the company is not genuinely "
+            "distressed. NCLT scrutinises whether the initial default was bona fide. Recent decisions "
+            "have rejected applications where the default looked engineered."
+        ),
+    },
+    {
+        "tag": "Pre-deal",
+        "title": "Due diligence priorities for an M&A target",
+        "summary": "What the CA should test before signing — the items most likely to materially affect deal value.",
+        "body": (
+            "Most due-diligence checklists are 100+ items long. In practice, 8–10 areas drive 90% "
+            "of value adjustments. <strong>Tax exposures</strong>: open assessments, transfer-pricing "
+            "audits, undeposited TDS, MSME 43B(h) disallowance, ICDS adjustments. "
+            "<strong>Statutory dues</strong>: GST mismatches between GSTR-2B and books, EPF/ESI "
+            "default, pending labour-law cases. <strong>Working-capital normalisation</strong>: "
+            "abnormal year-end push of receivables/payables (window-dressing). <strong>Contingent "
+            "liabilities</strong>: customer disputes, supplier penalties, pending litigation, "
+            "guarantees given. <strong>Title & encumbrances</strong>: registered charges on assets, "
+            "land titles, IP ownership. <strong>Key-customer concentration</strong>: top 5 customers "
+            "share of revenue, contractual change-of-control clauses. <strong>Key-person "
+            "dependency</strong>: founder / KMP retention. <strong>Compliance gaps</strong>: any "
+            "lapse in sectoral regulator compliance (RBI / IRDAI / DGCA / etc.) that could trigger "
+            "licence revocation."
+        ),
+        "example": (
+            "<strong>Example.</strong> Acquirer buying a mid-sized auto-component manufacturer at "
+            "₹500 cr. DD reveals: (i) MSME 43B(h) likely disallowance ₹40 cr (impacts 3 years of "
+            "tax adjustments + interest); (ii) GST ITC reversal exposure ₹15 cr; (iii) two key-"
+            "customer contracts have change-of-control termination clauses (revenue ₹100 cr/yr at "
+            "risk). DD findings translate into a ₹80 cr price reduction + indemnification cap and "
+            "specific representations from the seller. Deal closes at ₹420 cr with structured "
+            "deferred consideration."
+        ),
+        "hooks": (
+            "Tax DD: <span class='sec'>Sec 43B(h)</span>, ICDS, GST mismatches. "
+            "Statutory DD: Companies Act compliance, FEMA. Commercial DD: customer concentration, "
+            "key-person risk. Legal DD: title, encumbrances, contracts."
+        ),
+        "pitfalls": (
+            "Treating DD as a check-list exercise. The <em>value impact</em> of findings is what "
+            "matters; a long DD report with no specific quantification of price impact is useless "
+            "to deal negotiators. Always quantify."
+        ),
+    },
+    {
         "tag": "Universal principle",
         "title": "The going-concern principle",
         "summary": "The single test that runs across slump sale, demerger and cross-border alike.",

@@ -474,6 +474,425 @@ date. Save that disclosure — your CA will need it when computing capital gains
     # MAT (Sec 115JB)
     # ----------------------------------------------------------------------
     {
+        "slug": "buyback-shareholder-tax",
+        "title": "Buyback tax in shareholder's hands (post-Oct 2024 regime)",
+        "subject": "Tax",
+        "body": """
+<h2>Facts</h2>
+<p>Ms. Priya holds 1,000 equity shares of Vantage Ltd. (unlisted), each acquired in 2018 at
+₹100. Vantage Ltd. announces a buyback at ₹350 per share on 15 January 2026. Priya tenders
+all 1,000 shares.</p>
+
+<h2>Step 1 — Pre-Oct 2024 vs Post-Oct 2024 treatment</h2>
+<table>
+  <thead><tr><th>Item</th><th>Pre-1 Oct 2024</th><th>Post-1 Oct 2024 (applicable here)</th></tr></thead>
+  <tbody>
+    <tr><td>Tax in company (115QA)</td><td>20% × (price − issue price)</td><td>NIL (115QA withdrawn)</td></tr>
+    <tr><td>Tax in shareholder</td><td>Exempt u/s 10(34A)</td><td>Deemed dividend u/s 2(22); slab rate; TDS u/s 194 @ 10%</td></tr>
+  </tbody>
+</table>
+
+<h2>Step 2 — Compute shareholder's tax exposure</h2>
+<table>
+  <tbody>
+    <tr><td>Buyback consideration (1,000 × ₹350)</td><td>₹3,50,000</td></tr>
+    <tr><td>Deemed dividend under Sec 2(22) — full amount</td><td>₹3,50,000</td></tr>
+    <tr><td>Priya's slab (assume highest 30% + 4% cess + surcharge)</td><td>~33.59%</td></tr>
+    <tr><td>Income tax on dividend</td><td>~₹1,17,565</td></tr>
+    <tr><td>TDS u/s 194 @ 10% (deducted by company)</td><td>₹35,000</td></tr>
+    <tr><td>Balance tax payable by Priya at return-filing</td><td>~₹82,565</td></tr>
+  </tbody>
+</table>
+
+<h2>Step 3 — Capital loss on the bought-back shares</h2>
+<p>Cost of acquisition: 1,000 × ₹100 = ₹1,00,000. Since the shares are extinguished and no
+capital-gains consideration arises (the proceeds were treated as dividend), Priya is entitled
+to a <strong>capital loss of ₹1,00,000</strong>. As long-term (held > 24 months for unlisted),
+this is a long-term capital loss that can be set off only against long-term capital gains —
+not against the dividend income.</p>
+
+<h2>Step 4 — Net economic impact</h2>
+<table>
+  <tbody>
+    <tr><td>Cash received</td><td>₹3,50,000</td></tr>
+    <tr><td>Less: Tax on deemed dividend (33.59%)</td><td>(₹1,17,565)</td></tr>
+    <tr><td>Net cash after tax</td><td>₹2,32,435</td></tr>
+    <tr><td>Plus: LTCL of ₹1,00,000 to be carried forward and set off against future LTCG (potential future saving @ 12.5%)</td><td>₹12,500 (potential)</td></tr>
+    <tr><td><strong>Net post-tax economic value</strong></td><td><strong>~₹2,44,935</strong></td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+<strong>Comparison with pre-Oct 2024 regime.</strong> Under the old framework, Priya would have
+received ₹3,50,000 tax-free at her end (company paid ~₹50,000 buyback tax). Net to her: ₹3,50,000.
+The shift to shareholder taxation costs her ~₹1,05,000 in net cash at the same slab rate. The
+LTCL provides only partial recovery if she has future LTCG to offset.
+</div>
+""",
+    },
+
+    {
+        "slug": "capital-reduction-tax",
+        "title": "Capital reduction — deemed dividend vs return of capital",
+        "subject": "Tax",
+        "body": """
+<h2>Facts</h2>
+<p>Sigma Ltd. has 1 crore equity shares outstanding (face value ₹10, paid up). It undertakes
+a capital reduction under Sec 66 paying ₹40 per share to shareholders. The company's
+accumulated profits (free reserves + balance of P&L) as at the reduction date are ₹250 crore.</p>
+<p>Aditya holds 1,00,000 shares acquired in 2019 at ₹35 each.</p>
+
+<h2>Step 1 — Deemed dividend portion (Anarkali Sarabhai principle)</h2>
+<p>Total payout: 1,00,000 × ₹40 = ₹40,00,000.</p>
+<p>Sigma's accumulated profits attributable to Aditya's shareholding: ₹250 cr × (1,00,000 ÷
+1,00,00,000) = ₹2,50,000.</p>
+<p>Per Sec 2(22)(d) read with <em>Anarkali Sarabhai</em>:</p>
+<table>
+  <tbody>
+    <tr><td>Payout up to attributable accumulated profits</td><td>₹2,50,000 → Deemed dividend</td></tr>
+    <tr><td>Balance payout (₹40,00,000 − ₹2,50,000)</td><td>₹37,50,000 → Return of capital</td></tr>
+  </tbody>
+</table>
+
+<h2>Step 2 — Tax on deemed dividend portion</h2>
+<p>Slab rate (assume 30% + cess + surcharge) on ₹2,50,000:</p>
+<p>Tax ≈ ₹2,50,000 × 33.59% ≈ <strong>₹83,975</strong>.</p>
+
+<h2>Step 3 — Capital gain on return of capital portion</h2>
+<p>The return of capital (₹37,50,000) is set off against the cost of acquisition. If the return
+exceeds cost, the excess is a capital gain.</p>
+<table>
+  <tbody>
+    <tr><td>Cost of acquisition (1,00,000 × ₹35)</td><td>₹35,00,000</td></tr>
+    <tr><td>Return of capital portion</td><td>₹37,50,000</td></tr>
+    <tr><td><strong>Capital gain (long-term — held > 24 months)</strong></td><td><strong>₹2,50,000</strong></td></tr>
+  </tbody>
+</table>
+<p>LTCG on unlisted shares @ 12.5% (no indexation post-Budget 2024): ₹2,50,000 × 12.5% ≈
+<strong>₹31,250</strong>.</p>
+
+<h2>Step 4 — Cost of remaining shares (Sec 55(2)(v))</h2>
+<p>After capital reduction, the original cost gets reduced by the return-of-capital portion:</p>
+<p>Remaining cost = ₹35,00,000 − ₹37,50,000 = NIL (cost exhausted; future sale will have full
+consideration as gain).</p>
+
+<h2>Step 5 — Summary</h2>
+<table>
+  <tbody>
+    <tr><td>Total payout received</td><td>₹40,00,000</td></tr>
+    <tr><td>Tax on deemed dividend portion</td><td>(₹83,975)</td></tr>
+    <tr><td>Tax on capital gain portion</td><td>(₹31,250)</td></tr>
+    <tr><td><strong>Net after-tax cash to Aditya</strong></td><td><strong>~₹38,84,775</strong></td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+<strong>Planning insight.</strong> A capital reduction is significantly more tax-efficient than
+a dividend distribution where (a) shareholders' cost basis is high relative to the payout
+(absorbing the return-of-capital portion as basis reduction) and (b) the company has limited
+accumulated profits. If the same payout were a dividend, the entire ₹40,00,000 would be
+deemed dividend — tax exposure ~₹13.4 lakh vs ~₹1.15 lakh in the reduction structure.
+</div>
+""",
+    },
+
+    {
+        "slug": "ind-as-21-foreign-currency",
+        "title": "Ind AS 21 — Foreign currency monetary & non-monetary items at year-end",
+        "subject": "Ind AS",
+        "body": """
+<h2>Facts</h2>
+<p>OmegaTech Ltd. has the following balances in foreign currency as at 31 March 2027:</p>
+<table>
+  <thead><tr><th>Item</th><th>Currency</th><th>Amount</th><th>Rate when arose</th><th>Closing rate (31 Mar 2027)</th></tr></thead>
+  <tbody>
+    <tr><td>Trade receivables from US customer</td><td>USD</td><td>2,00,000</td><td>₹82/$</td><td>₹83.50/$</td></tr>
+    <tr><td>Trade payable to German supplier</td><td>EUR</td><td>1,00,000</td><td>₹89/€</td><td>₹91/€</td></tr>
+    <tr><td>External Commercial Borrowing (ECB)</td><td>USD</td><td>10,00,000</td><td>₹81/$</td><td>₹83.50/$</td></tr>
+    <tr><td>Advance paid to supplier (refundable in INR)</td><td>USD-denominated invoice</td><td>50,000</td><td>₹82.50/$</td><td>₹83.50/$</td></tr>
+    <tr><td>Inventory purchased in EUR</td><td>EUR</td><td>50,000</td><td>₹87/€</td><td>₹91/€</td></tr>
+  </tbody>
+</table>
+
+<h2>Step 1 — Classify each item as monetary vs non-monetary</h2>
+<table>
+  <thead><tr><th>Item</th><th>Type</th><th>Reason</th></tr></thead>
+  <tbody>
+    <tr><td>Trade receivables</td><td>Monetary</td><td>Right to receive a determined amount of cash</td></tr>
+    <tr><td>Trade payable</td><td>Monetary</td><td>Obligation to pay a determined amount of cash</td></tr>
+    <tr><td>ECB (foreign currency loan)</td><td>Monetary</td><td>Loan repayable in determined cash</td></tr>
+    <tr><td>Refundable advance (INR settlement)</td><td>Non-monetary</td><td>Settlement is in INR; the FX value is irrelevant. Per Ind AS 21, classification depends on settlement currency.</td></tr>
+    <tr><td>Inventory</td><td>Non-monetary</td><td>Not a contractual right to cash; held for sale</td></tr>
+  </tbody>
+</table>
+
+<h2>Step 2 — Retranslate monetary items at closing rate; non-monetary items at historical rate</h2>
+<table>
+  <thead><tr><th>Item</th><th>At inception (₹)</th><th>At year-end (₹)</th><th>Difference (₹)</th><th>Recognise where</th></tr></thead>
+  <tbody>
+    <tr><td>Receivables (2,00,000 × $)</td><td>1,64,00,000</td><td>1,67,00,000</td><td>+3,00,000 (gain)</td><td>P&L</td></tr>
+    <tr><td>Payables (1,00,000 × €)</td><td>89,00,000</td><td>91,00,000</td><td>(2,00,000) loss</td><td>P&L</td></tr>
+    <tr><td>ECB (10,00,000 × $)</td><td>8,10,00,000</td><td>8,35,00,000</td><td>(25,00,000) loss</td><td>P&L (or capitalised if qualifying asset under Ind AS 23)</td></tr>
+    <tr><td>Refundable advance</td><td>41,25,000</td><td>41,25,000 (no retranslation)</td><td>NIL</td><td>—</td></tr>
+    <tr><td>Inventory</td><td>43,50,000</td><td>43,50,000 (no retranslation)</td><td>NIL</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<h2>Step 3 — Net P&L impact</h2>
+<p>Gain on receivables ₹3,00,000 − Loss on payables ₹2,00,000 − Loss on ECB ₹25,00,000 =
+<strong>Net exchange loss ₹24,00,000</strong> in P&L (under "Finance costs / Other expenses").</p>
+
+<h2>Step 4 — Disclosures</h2>
+<ul>
+  <li>The amount of exchange differences recognised in P&L (and OCI for foreign-operation translation).</li>
+  <li>Functional currency, presentation currency.</li>
+  <li>If functional currency differs from presentation currency, the rates used and the reason.</li>
+</ul>
+
+<div class="callout">
+<strong>Common error.</strong> Classifying a foreign-currency-denominated <em>but
+INR-settled</em> receivable/payable as monetary. The classification depends on the
+<em>settlement currency</em>, not the invoice currency. Always check the contractual
+settlement terms.
+</div>
+""",
+    },
+
+    {
+        "slug": "internal-audit-p2p-rcm",
+        "title": "Internal audit — Risk and Control Matrix for Procure-to-Pay",
+        "subject": "Internal Audit",
+        "body": """
+<h2>Process: Procure-to-Pay (P2P) — abridged RCM</h2>
+<p>The Risk and Control Matrix is the foundational internal-audit deliverable for any
+process. Below is an abridged RCM for the P2P cycle.</p>
+
+<table>
+  <thead><tr><th>Process step</th><th>Risk (What could go wrong)</th><th>Control</th><th>Type</th><th>Frequency</th><th>Test approach</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>1. Vendor master maintenance</td>
+      <td>Unauthorised changes to vendor bank details enable diversion of payments</td>
+      <td>All vendor master changes require dual approval (request by AP, approve by Finance Head); system logs all changes</td>
+      <td>Preventive, manual, key</td>
+      <td>Per change</td>
+      <td>Sample 25 vendor changes from the year; verify dual approval and bank-detail change rationale</td>
+    </tr>
+    <tr>
+      <td>2. Purchase requisition (PR)</td>
+      <td>PR raised without business justification or budget approval</td>
+      <td>System-enforced approval matrix (e.g., HOD ≤ ₹10L; CFO ≤ ₹1Cr; CEO > ₹1Cr); budget check at PR creation</td>
+      <td>Preventive, automated, key</td>
+      <td>Per transaction</td>
+      <td>Sample 30 POs across approval levels; verify approver was within delegation and budget existed</td>
+    </tr>
+    <tr>
+      <td>3. PO creation</td>
+      <td>PO terms (price, quantity, payment terms) differ from approved PR</td>
+      <td>System validates PO against PR; variances flagged for re-approval</td>
+      <td>Preventive, automated</td>
+      <td>Per transaction</td>
+      <td>Review system flag-and-block log; sample 15 flagged exceptions and verify resolution</td>
+    </tr>
+    <tr>
+      <td>4. Goods receipt (GRN)</td>
+      <td>Goods/services not received or received in lesser quantity than billed</td>
+      <td>Three-way match: PO + GRN + Invoice must reconcile; variances ≤ tolerance auto-approved, above tolerance routed for explanation</td>
+      <td>Detective, automated, key</td>
+      <td>Per transaction</td>
+      <td>Sample 40 invoices; trace to PO and GRN; verify match or rationale for variance</td>
+    </tr>
+    <tr>
+      <td>5. Invoice processing</td>
+      <td>Duplicate invoices paid (same invoice number from same vendor)</td>
+      <td>System duplicate-invoice check on (vendor ID + invoice number + invoice date)</td>
+      <td>Preventive, automated</td>
+      <td>Per transaction</td>
+      <td>Run CAAT to identify duplicate invoice number-vendor combinations from full year; verify each is genuinely duplicate or appropriately handled</td>
+    </tr>
+    <tr>
+      <td>6. Payment release</td>
+      <td>Payment to wrong bank account due to compromised vendor details or social engineering</td>
+      <td>Payment confirmation call to vendor on bank-detail changes; segregation between vendor master and payment authorisation</td>
+      <td>Preventive, manual + automated</td>
+      <td>Per change</td>
+      <td>Sample 15 bank-detail changes in past year and confirm the verification call log; check SoD via user access report</td>
+    </tr>
+    <tr>
+      <td>7. TDS deduction</td>
+      <td>TDS not deducted, deducted at wrong rate, or not deposited timely → Sec 40(a)(ia) disallowance</td>
+      <td>Vendor master tagged with TDS section and rate; automated deduction at payment; monthly TDS reconciliation</td>
+      <td>Preventive + detective, automated</td>
+      <td>Per transaction</td>
+      <td>Sample 25 vendor payments across TDS sections; verify rate, deduction, deposit date and Form 26Q filing</td>
+    </tr>
+    <tr>
+      <td>8. Bank reconciliation</td>
+      <td>Unauthorised / unrecorded payments going through the operating bank</td>
+      <td>Monthly bank reconciliation by independent person (not the payment authoriser); CFO review</td>
+      <td>Detective, manual, key</td>
+      <td>Monthly</td>
+      <td>Inspect 6 months of bank reconciliations; verify all open items investigated; CFO review evidence</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout">
+<strong>Practical tip.</strong> Build the RCM in a spreadsheet with the columns above plus an
+"observation" and "rating" column populated during fieldwork. The RCM becomes both the test
+plan AND the findings report. One unified working paper per process.
+</div>
+""",
+    },
+
+    {
+        "slug": "labour-wage-impact",
+        "title": "Labour codes — wage definition impact on PF / gratuity",
+        "subject": "Labour",
+        "body": """
+<h2>Facts</h2>
+<p>Mr. Karthik draws a CTC of ₹12,00,000 per annum at Acme Pvt. Ltd. The current CTC
+structure is:</p>
+<table>
+  <tbody>
+    <tr><td>Basic Salary</td><td>₹3,00,000 (25% of CTC)</td></tr>
+    <tr><td>HRA</td><td>₹1,50,000</td></tr>
+    <tr><td>Special Allowance</td><td>₹4,50,000</td></tr>
+    <tr><td>LTA, Telephone, Books etc.</td><td>₹1,80,000</td></tr>
+    <tr><td>Employer PF (12% on Basic only)</td><td>₹36,000</td></tr>
+    <tr><td>Employer Gratuity (4.81% on Basic)</td><td>₹14,430</td></tr>
+    <tr><td>Other</td><td>~₹69,570</td></tr>
+    <tr><td><strong>Total CTC</strong></td><td><strong>₹12,00,000</strong></td></tr>
+  </tbody>
+</table>
+
+<h2>Step 1 — Identify the issue under Code on Wages</h2>
+<p>Section 2(y) of Code on Wages 2019 mandates that the "wages" (broadly basic + DA + retaining
+allowance) must be at least 50% of the total remuneration. Where excluded allowances (HRA,
+LTA, special allowance, etc.) exceed 50% of remuneration, the excess is <strong>added back to
+wages</strong> for statutory contributions.</p>
+
+<h2>Step 2 — Apply the 50% test</h2>
+<table>
+  <tbody>
+    <tr><td>Total remuneration (CTC excluding employer contributions)</td><td>₹10,80,000</td></tr>
+    <tr><td>Basic (current)</td><td>₹3,00,000 (27.8%)</td></tr>
+    <tr><td>50% floor required</td><td>₹5,40,000</td></tr>
+    <tr><td>Add-back to "wages"</td><td>₹2,40,000 (5,40,000 − 3,00,000)</td></tr>
+    <tr><td><strong>Effective wages for PF/gratuity computation</strong></td><td><strong>₹5,40,000</strong></td></tr>
+  </tbody>
+</table>
+
+<h2>Step 3 — Recompute statutory contributions under the new wage definition</h2>
+<table>
+  <thead><tr><th></th><th>Current (Basic-only)</th><th>Post-Codes (50% floor)</th><th>Increase</th></tr></thead>
+  <tbody>
+    <tr><td>Employer PF (12%)</td><td>₹36,000</td><td>₹64,800</td><td>+₹28,800</td></tr>
+    <tr><td>Employee PF (12%)</td><td>₹36,000</td><td>₹64,800</td><td>+₹28,800</td></tr>
+    <tr><td>Gratuity provision (4.81%)</td><td>₹14,430</td><td>₹25,974</td><td>+₹11,544</td></tr>
+    <tr><td><strong>Total cost increase per employee</strong></td><td></td><td></td><td><strong>~₹69,144 / year (5.8% of CTC)</strong></td></tr>
+  </tbody>
+</table>
+
+<h2>Step 4 — Karthik's take-home impact</h2>
+<table>
+  <tbody>
+    <tr><td>Current net take-home (after Employee PF ₹36,000)</td><td>₹10,44,000 gross less tax</td></tr>
+    <tr><td>Post-Codes net take-home (after Employee PF ₹64,800)</td><td>₹10,15,200 gross less tax</td></tr>
+    <tr><td><strong>Reduction in take-home</strong></td><td><strong>₹28,800 / year (~₹2,400 / month)</strong></td></tr>
+  </tbody>
+</table>
+
+<h2>Step 5 — Restructuring CTC to mitigate</h2>
+<p>Options for the employer:</p>
+<ul>
+  <li><strong>Status quo</strong> — absorb the 5.8% increase as compliance cost.</li>
+  <li><strong>Restructure CTC</strong> — keep total CTC at ₹12 lakh but increase basic to 50% (₹6 lakh) and reduce allowances proportionately. Same compliance cost but full transparency.</li>
+  <li><strong>Cap PF at threshold</strong> — many employers will opt to contribute PF only up to the statutory wage ceiling (₹15,000/month = ₹1.8 lakh/year), shifting the burden away. Requires careful drafting in offer letter.</li>
+  <li><strong>Pass through</strong> — increase gross CTC by ~5.8% to maintain take-home.</li>
+</ul>
+
+<div class="callout">
+<strong>Drafting consideration.</strong> When restructuring offer letters, distinguish between
+"Basic + DA" (subject to 50% test) and "wages" (the broader definition used by the Codes for
+PF/gratuity computation). Employee retention can be sensitive — communicate the change
+transparently before implementation. Most large employers are running the impact in HR
+modelling tools before State Rules are notified.
+</div>
+""",
+    },
+
+    {
+        "slug": "merger-tax-loss-72a",
+        "title": "Sec 72A — Carry-forward of business loss on amalgamation",
+        "subject": "Tax",
+        "body": """
+<h2>Facts</h2>
+<p>Sunrise Mfg. Ltd. (an industrial undertaking) has accumulated business loss of ₹500 cr and
+unabsorbed depreciation of ₹200 cr as of 31 March 2026. Skyline Ltd., a profitable industrial
+unit, is acquiring Sunrise via amalgamation effective 1 April 2026.</p>
+<p>Both companies have been engaged in their respective businesses for over 5 years. Sunrise
+has held its industrial assets for 4 years (book value ₹600 cr) and continues to operate at
+60% capacity.</p>
+
+<h2>Step 1 — Eligibility conditions under Sec 72A(1)</h2>
+<table>
+  <thead><tr><th>Condition</th><th>Sunrise (amalgamating)</th><th>Skyline (amalgamated)</th></tr></thead>
+  <tbody>
+    <tr><td>Industrial undertaking?</td><td>✓ Mfg</td><td>✓ Mfg</td></tr>
+    <tr><td>Engaged in business for ≥ 3 yrs</td><td>✓ (5+ years)</td><td>—</td></tr>
+    <tr><td>Held ≥ 3/4 of fixed assets for ≥ 2 yrs</td><td>✓ (4 years; assumed met)</td><td>—</td></tr>
+    <tr><td>Continue business for ≥ 5 years post-amalgamation</td><td>—</td><td>Will continue (commitment)</td></tr>
+    <tr><td>Hold ≥ 3/4 of acquired fixed assets for ≥ 5 yrs</td><td>—</td><td>Will hold (commitment)</td></tr>
+    <tr><td>Achieve ≥ 50% of installed capacity within 4 yrs</td><td>—</td><td>Currently at 60% (already met)</td></tr>
+  </tbody>
+</table>
+<p>All conditions satisfied → Skyline is entitled to carry forward Sunrise's losses.</p>
+
+<h2>Step 2 — Compute available loss carry-forward</h2>
+<table>
+  <tbody>
+    <tr><td>Sunrise's accumulated business loss (deemed Skyline's)</td><td>₹500 cr</td></tr>
+    <tr><td>Sunrise's unabsorbed depreciation (deemed Skyline's)</td><td>₹200 cr</td></tr>
+    <tr><td><strong>Total carry-forward to Skyline</strong></td><td><strong>₹700 cr</strong></td></tr>
+  </tbody>
+</table>
+
+<h2>Step 3 — Skyline's projected tax benefit</h2>
+<p>Assume Skyline expects post-merger taxable profit (before set-off) of ₹150 cr per annum
+for next 5 years.</p>
+<table>
+  <thead><tr><th>Year</th><th>Profit before set-off</th><th>Set-off</th><th>Taxable</th><th>Loss remaining</th></tr></thead>
+  <tbody>
+    <tr><td>FY27</td><td>150</td><td>150</td><td>0</td><td>550</td></tr>
+    <tr><td>FY28</td><td>150</td><td>150</td><td>0</td><td>400</td></tr>
+    <tr><td>FY29</td><td>150</td><td>150</td><td>0</td><td>250</td></tr>
+    <tr><td>FY30</td><td>150</td><td>150</td><td>0</td><td>100</td></tr>
+    <tr><td>FY31</td><td>150</td><td>100</td><td>50</td><td>0</td></tr>
+  </tbody>
+</table>
+<p>Total set-off realised: ₹700 cr. Tax saved (assuming 25.168% effective rate): 700 × 25.168%
+= <strong>~₹176 cr</strong> over 5 years.</p>
+
+<h2>Step 4 — Compliance and monitoring</h2>
+<ul>
+  <li>Skyline must hold ≥ 3/4 of fixed assets acquired from Sunrise for 5 years (sale or transfer of significant fixed assets triggers 47A claw-back).</li>
+  <li>Skyline must operate at ≥ 50% capacity within 4 years.</li>
+  <li>If any condition is breached within 5 years, the loss carry-forward is withdrawn under Sec 47A and the unutilised portion becomes immediately taxable as income of the year of breach.</li>
+  <li>Audit firm should maintain a Sec 72A monitoring memo for each subsequent year confirming compliance.</li>
+</ul>
+
+<div class="callout">
+<strong>Note for non-industrial businesses.</strong> Sec 72A only applies to "industrial
+undertakings" as defined in Sec 72A(7) — manufacturing, processing, hotels (defined classes),
+operation of ships/aircraft. Pure trading and most services are <em>not eligible</em> for
+loss carry-forward via amalgamation. For services businesses, alternative structures (e.g.,
+asset acquisition with separate compensation, IBC-route Sec 79(2)(c)) must be considered.
+</div>
+""",
+    },
+
+    {
         "slug": "mat-115jb",
         "title": "MAT computation under Sec 115JB (Ind AS company)",
         "subject": "Tax",

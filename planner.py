@@ -27,6 +27,8 @@ from content_mastery_notes import MASTERY_NOTES
 from content_glossary import GLOSSARY
 from content_templates import TEMPLATES
 from content_examples import EXAMPLES
+from content_faqs import FAQS
+from content_quiz import QUIZ
 from templates import PLANNER_HTML
 
 
@@ -87,6 +89,8 @@ def build_areas():
             examples_by_subject.get("Restructuring", []) +
             examples_by_subject.get("Tax", [])
         ),
+        "faqs": FAQS.get("restructuring", []),
+        "quiz": QUIZ.get("restructuring", []),
         "matrix": MATRIX,
         "books": BOOKS,
         "sources": SOURCES,
@@ -98,6 +102,8 @@ def build_areas():
     examples_subject_for = {
         "ind-as": "Ind AS",
         "it-act-2025": "Tax",
+        "internal-audit": "Internal Audit",
+        "labor-codes": "Labour",
     }
 
     for i, ma in enumerate(MASTERY_AREAS):
@@ -113,6 +119,8 @@ def build_areas():
             "topics": ma["topics"],
             "note_body": note.get("body", ""),
             "examples": examples_by_subject.get(subj, []) if subj else [],
+            "faqs": FAQS.get(ma["slug"], []),
+            "quiz": QUIZ.get(ma["slug"], []),
             "books": ma["books"],
             "sources": ma["sources"],
         })
@@ -155,6 +163,8 @@ SOURCE_FILES = [
     "content_glossary.py",
     "content_templates.py",
     "content_examples.py",
+    "content_faqs.py",
+    "content_quiz.py",
     "templates.py",
 ]
 
