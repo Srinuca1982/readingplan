@@ -215,6 +215,150 @@ h1 {
   line-height: 1.6;
 }
 
+/* === Table of contents === */
+.toc-box {
+  background: linear-gradient(180deg, var(--paper) 70%, var(--paper-2));
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.toc-box > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 1px solid transparent;
+  transition: background 0.15s;
+}
+.toc-box[open] > summary { border-bottom-color: var(--border-soft); }
+.toc-box > summary::-webkit-details-marker { display: none; }
+.toc-box > summary:hover { background: var(--paper-2); }
+.toc-title {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  font-weight: 700;
+}
+.toc-hint {
+  font-size: 12px;
+  color: var(--ink-mute);
+  flex: 1;
+}
+.toc-list {
+  list-style: none;
+  padding: 14px 24px 18px;
+  margin: 0;
+  column-count: 1;
+}
+@media (min-width: 720px) { .toc-list { column-count: 2; column-gap: 36px; } }
+.toc-row {
+  break-inside: avoid;
+  margin-bottom: 10px;
+}
+.toc-chapter {
+  display: inline-block;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  margin-bottom: 4px;
+}
+.toc-chapter:hover { color: var(--accent); text-decoration: none; }
+.toc-num {
+  display: inline-block;
+  min-width: 28px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.86em;
+  color: var(--accent);
+  font-weight: 700;
+}
+.toc-count {
+  font-weight: 400;
+  color: var(--ink-mute);
+  font-size: 0.88em;
+}
+.toc-subs {
+  list-style: none;
+  padding: 0 0 0 28px;
+  margin: 4px 0 0 0;
+}
+.toc-subs li { margin: 2px 0; }
+.toc-subs a {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  line-height: 1.4;
+}
+.toc-subs a:hover { color: var(--accent); }
+.toc-subs .toc-num {
+  min-width: 32px;
+  font-size: 0.78em;
+}
+.toc-more {
+  font-size: 0.82rem;
+  color: var(--ink-mute);
+  font-style: italic;
+  padding-left: 32px;
+}
+
+/* === Chapter number labels === */
+.chapter-num {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-tint);
+  padding: 3px 9px;
+  border-radius: 10px;
+  margin-right: 10px;
+  white-space: nowrap;
+}
+.chapter-sub-num {
+  display: inline-block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78em;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-tint);
+  padding: 2px 7px;
+  border-radius: 8px;
+  margin-right: 6px;
+  white-space: nowrap;
+}
+.book-num {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78em;
+  font-weight: 700;
+  color: var(--gold);
+  background: var(--gold-tint);
+  padding: 2px 8px;
+  border-radius: 8px;
+}
+.book-card { position: relative; }
+
+.section-top-link {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-soft);
+  text-align: right;
+}
+.section-top-link a {
+  font-size: 0.85rem;
+  color: var(--ink-mute);
+  text-decoration: none;
+}
+.section-top-link a:hover { color: var(--accent); }
+
 /* === Section accordion === */
 .content-section {
   margin-bottom: 14px;
@@ -1042,24 +1186,124 @@ function taskId(area, wi, ti) {
   return area.task_prefix + wi + "_t" + ti;
 }
 
-function sectionShell(title, count, body, open) {
+function sectionShell(title, count, body, open, anchorId, chapterNum) {
   const openAttr = open ? " open" : "";
+  const idAttr = anchorId ? ' id="' + anchorId + '"' : "";
   const countHTML = count != null ? '<span class="section-count">' + escapeHTML(count) + '</span>' : "";
-  return '<details class="content-section"' + openAttr + '>' +
+  const chapterLabel = chapterNum != null
+    ? '<span class="chapter-num">Chapter ' + chapterNum + '</span> '
+    : "";
+  const topLink = anchorId
+    ? '<div class="section-top-link"><a href="#toc-' + anchorId + '">↑ Back to contents</a></div>'
+    : "";
+  return '<details class="content-section"' + idAttr + openAttr + '>' +
     '<summary>' +
       '<span class="section-title">' +
+        chapterLabel +
         '<span class="section-title-text">' + escapeHTML(title) + '</span>' +
         countHTML +
       '</span>' +
       '<span class="section-chevron"></span>' +
     '</summary>' +
-    '<div class="section-body">' + body + '</div>' +
+    '<div class="section-body">' + body + topLink + '</div>' +
+  '</details>';
+}
+
+function buildChapters(area) {
+  const chs = [];
+  if (area.weeks && area.weeks.length) {
+    chs.push({ kind: 'roadmap', title: 'Roadmap', count: area.weeks.length + ' weeks',
+      items: area.weeks.map((w, i) => ({ idx: i, label: 'Week ' + w.week + ' — ' + w.title })) });
+  }
+  if (area.concepts && area.concepts.length) {
+    chs.push({ kind: 'concepts', title: 'Concepts & Examples', count: area.concepts.length,
+      items: area.concepts.map((c, i) => ({ idx: i, label: c.title })) });
+  }
+  if (area.topics && area.topics.length) {
+    chs.push({ kind: 'topics', title: 'Key Topics', count: area.topics.length, items: [] });
+  }
+  if (area.note_body) {
+    chs.push({ kind: 'note', title: 'Deep-Dive Study Note', count: null, items: [] });
+  }
+  if (area.examples && area.examples.length) {
+    chs.push({ kind: 'examples', title: 'Worked Examples', count: area.examples.length,
+      items: area.examples.map((e, i) => ({ idx: i, label: e.title })) });
+  }
+  if (area.quiz && area.quiz.length) {
+    chs.push({ kind: 'quiz', title: 'Self-Test (MCQs)', count: area.quiz.length,
+      items: area.quiz.map((q, i) => ({ idx: i, label: 'Q' + (i + 1) })) });
+  }
+  if (area.faqs && area.faqs.length) {
+    chs.push({ kind: 'faqs', title: 'FAQ (official sources)', count: area.faqs.length,
+      items: area.faqs.map((f, i) => ({ idx: i, label: f.q.length > 70 ? f.q.substring(0, 67) + '…' : f.q })) });
+  }
+  if (area.materials && area.materials.length) {
+    chs.push({ kind: 'materials', title: 'Notes, Cheat Sheets & Case Law', count: area.materials.length,
+      items: area.materials.map((m, i) => ({ idx: i, label: m.title })) });
+  }
+  if (area.templates && area.templates.length) {
+    chs.push({ kind: 'templates', title: 'Drafting Templates', count: area.templates.length,
+      items: area.templates.map((t, i) => ({ idx: i, label: t.title })) });
+  }
+  if (area.books && area.books.length) {
+    chs.push({ kind: 'books', title: 'Books', count: area.books.length,
+      items: area.books.map((b, i) => ({ idx: i, label: b.title })) });
+  }
+  if (area.sources && area.sources.length) {
+    chs.push({ kind: 'sources', title: 'Online Sources', count: area.sources.length,
+      items: area.sources.map((s, i) => ({ idx: i, label: s.name })) });
+  }
+  if (area.matrix) {
+    chs.push({ kind: 'matrix', title: 'Cross-Statute Matrix', count: area.matrix.rows.length + ' modes', items: [] });
+  }
+  chs.forEach((c, i) => { c.num = i + 1; c.anchorId = area.slug + '-ch' + c.num; });
+  return chs;
+}
+
+function chapterItemAnchorId(area, chapter, itemIdx) {
+  return area.slug + '-ch' + chapter.num + '-' + (itemIdx + 1);
+}
+
+function renderTOC(area, chapters) {
+  if (!chapters.length) return "";
+  const rows = chapters.map(c => {
+    let subs = "";
+    if (c.items && c.items.length) {
+      // Cap visible sub-items per chapter to keep TOC scannable; show first 8 + "more…"
+      const maxShown = 8;
+      const visible = c.items.slice(0, maxShown);
+      subs = '<ul class="toc-subs">' + visible.map((it, i) =>
+        '<li><a href="#' + escapeHTML(chapterItemAnchorId(area, c, i)) + '">' +
+          '<span class="toc-num">' + c.num + '.' + (it.idx + 1) + '</span> ' +
+          escapeHTML(it.label) + '</a></li>'
+      ).join("") +
+      (c.items.length > maxShown
+        ? '<li class="toc-more">… and ' + (c.items.length - maxShown) + ' more</li>'
+        : "")
+      + '</ul>';
+    }
+    return '<li class="toc-row">' +
+      '<a class="toc-chapter" href="#' + escapeHTML(c.anchorId) + '" id="toc-' + escapeHTML(c.anchorId) + '">' +
+        '<span class="toc-num">' + c.num + '.</span> ' +
+        escapeHTML(c.title) +
+        (c.count != null ? ' <span class="toc-count">(' + escapeHTML(c.count) + ')</span>' : '') +
+      '</a>' +
+      subs +
+    '</li>';
+  }).join("");
+  return '<details class="toc-box" open id="toc-' + escapeHTML(area.slug) + '">' +
+    '<summary>' +
+      '<span class="toc-title">Contents</span>' +
+      '<span class="toc-hint">' + chapters.length + ' chapters · click any heading to jump</span>' +
+      '<span class="section-chevron"></span>' +
+    '</summary>' +
+    '<ol class="toc-list">' + rows + '</ol>' +
   '</details>';
 }
 
 // ----- per-subject section renderers -----
 
-function renderWeeksSection(area) {
+function renderWeeksSection(area, chapter) {
   const rows = area.weeks.map((w, wi) => {
     const tasks = w.tasks.map((t, ti) => {
       const id = taskId(area, wi, ti);
@@ -1069,8 +1313,10 @@ function renderWeeksSection(area) {
         '<span>' + escapeHTML(t) + '</span></li>';
     }).join("");
     const allDone = w.tasks.length > 0 && w.tasks.every((_, ti) => state.tasks[taskId(area, wi, ti)]);
-    return '<article class="week-card ' + (allDone ? 'complete' : '') + '">' +
+    const anchor = chapterItemAnchorId(area, chapter, wi);
+    return '<article class="week-card ' + (allDone ? 'complete' : '') + '" id="' + escapeHTML(anchor) + '">' +
       '<div class="week-head">' +
+        '<span class="chapter-sub-num">' + chapter.num + '.' + (wi + 1) + '</span>' +
         '<span class="week-tag">Week ' + escapeHTML(w.week) + '</span>' +
         '<span class="week-title">' + escapeHTML(w.title) + '</span>' +
       '</div>' +
@@ -1078,17 +1324,19 @@ function renderWeeksSection(area) {
       '<ul class="tasks">' + tasks + '</ul></article>';
   }).join("");
   const count = area.weeks.length + " weeks";
-  return sectionShell("Roadmap", count, '<div class="weeks-grid">' + rows + '</div>', true);
+  return sectionShell("Roadmap", count, '<div class="weeks-grid">' + rows + '</div>', true, chapter.anchorId, chapter.num);
 }
 
-function renderConceptsSection(area) {
+function renderConceptsSection(area, chapter) {
   if (!area.concepts || !area.concepts.length) return "";
-  const html = area.concepts.map(c => {
+  const html = area.concepts.map((c, i) => {
     const example = c.example ? '<h4>Example</h4><div class="example">' + c.example + '</div>' : '';
     const hooks = c.hooks ? '<h4>Statutory hooks</h4><p>' + c.hooks + '</p>' : '';
     const pitfalls = c.pitfalls ? '<h4>Common pitfalls</h4><p>' + c.pitfalls + '</p>' : '';
-    return '<details class="concept">' +
+    const anchor = chapterItemAnchorId(area, chapter, i);
+    return '<details class="concept" id="' + escapeHTML(anchor) + '">' +
       '<summary>' +
+        '<span class="chapter-sub-num">' + chapter.num + '.' + (i + 1) + '</span> ' +
         '<span class="concept-tag">' + escapeHTML(c.tag) + '</span>' +
         '<div class="concept-title">' + escapeHTML(c.title) + '</div>' +
         '<div class="concept-summary">' + escapeHTML(c.summary) + '</div>' +
@@ -1098,22 +1346,22 @@ function renderConceptsSection(area) {
         example + hooks + pitfalls +
       '</div></details>';
   }).join("");
-  return sectionShell("Concepts & Examples", area.concepts.length, html, false);
+  return sectionShell("Concepts & Examples", area.concepts.length, html, false, chapter.anchorId, chapter.num);
 }
 
-function renderTopicsSection(area) {
+function renderTopicsSection(area, chapter) {
   if (!area.topics || !area.topics.length) return "";
   const items = area.topics.map(t => '<li>' + escapeHTML(t) + '</li>').join("");
-  return sectionShell("Key Topics", area.topics.length, '<ul class="topics-list">' + items + '</ul>', false);
+  return sectionShell("Key Topics", area.topics.length, '<ul class="topics-list">' + items + '</ul>', false, chapter.anchorId, chapter.num);
 }
 
-function renderDeepDiveSection(area) {
+function renderDeepDiveSection(area, chapter) {
   if (!area.note_body) return "";
   const body = '<div class="deep-dive-body article-body">' + area.note_body + '</div>';
-  return sectionShell("Deep-Dive Study Note", null, body, false);
+  return sectionShell("Deep-Dive Study Note", null, body, false, chapter.anchorId, chapter.num);
 }
 
-function renderMaterialsSection(area) {
+function renderMaterialsSection(area, chapter) {
   if (!area.materials || !area.materials.length) return "";
   const filters = ['<button class="materials-filter ' + (materialFilter === "all" ? "active" : "") + '" data-filter="all">All</button>',
                    '<button class="materials-filter ' + (materialFilter === "Study Note" ? "active" : "") + '" data-filter="Study Note">Study Notes</button>',
@@ -1121,36 +1369,42 @@ function renderMaterialsSection(area) {
                    '<button class="materials-filter ' + (materialFilter === "Case Digest" ? "active" : "") + '" data-filter="Case Digest">Case Law</button>'].join("");
 
   const groups = { "Study Note": [], "Cheat Sheet": [], "Case Digest": [] };
-  area.materials.forEach(m => { if (groups[m.kind]) groups[m.kind].push(m); });
+  // Build a flat-index map so each material gets the same subsection number across filters
+  const flatIndex = new Map();
+  area.materials.forEach((m, i) => { flatIndex.set(m.slug, i); if (groups[m.kind]) groups[m.kind].push(m); });
   const order = ["Study Note", "Cheat Sheet", "Case Digest"];
   const labels = { "Study Note": "Study Notes", "Cheat Sheet": "Cheat Sheets", "Case Digest": "Case Digests" };
 
   const groupsHTML = order.filter(k => groups[k].length && (materialFilter === "all" || materialFilter === k)).map(k => {
-    const items = groups[k].map(m =>
-      '<details class="material-item" id="mat-' + escapeHTML(m.slug) + '">' +
+    const items = groups[k].map(m => {
+      const i = flatIndex.get(m.slug);
+      const anchor = chapterItemAnchorId(area, chapter, i);
+      return '<details class="material-item" id="' + escapeHTML(anchor) + '">' +
         '<summary>' +
-          '<div class="material-item-title">' + escapeHTML(m.title) + '</div>' +
+          '<div class="material-item-title"><span class="chapter-sub-num">' + chapter.num + '.' + (i + 1) + '</span> ' + escapeHTML(m.title) + '</div>' +
           '<div class="material-item-summary">' + escapeHTML(m.summary) + '</div>' +
         '</summary>' +
         '<div class="material-item-body article-body">' + m.body + '</div>' +
-      '</details>'
-    ).join("");
+      '</details>';
+    }).join("");
     return '<div class="material-group"><div class="material-group-head">' + escapeHTML(labels[k]) + '</div>' + items + '</div>';
   }).join("");
 
   const body = '<div class="materials-controls">' + filters + '</div>' +
                '<div id="materials-' + escapeHTML(area.slug) + '">' + groupsHTML + '</div>';
-  return sectionShell("Notes, Cheat Sheets & Case Law", area.materials.length, body, false);
+  return sectionShell("Notes, Cheat Sheets & Case Law", area.materials.length, body, false, chapter.anchorId, chapter.num);
 }
 
-function renderBooksSection(area) {
+function renderBooksSection(area, chapter) {
   if (!area.books || !area.books.length) return "";
   const cards = area.books.map((b, i) => {
     const id = "book_" + area.slug + "_" + i;
     const owned = !!state.books[id];
     const priority = b.priority || "";
     const publisher = b.publisher || "";
-    return '<article class="book-card">' +
+    const anchor = chapterItemAnchorId(area, chapter, i);
+    return '<article class="book-card" id="' + escapeHTML(anchor) + '">' +
+      '<div class="book-num">' + chapter.num + '.' + (i + 1) + '</div>' +
       (priority ? '<div class="book-priority">' + escapeHTML(priority) + '</div>' : "") +
       '<div class="book-title">' + escapeHTML(b.title) + '</div>' +
       '<div class="book-author">' + escapeHTML(b.author) + '</div>' +
@@ -1162,23 +1416,24 @@ function renderBooksSection(area) {
         '<span class="toggle-label">' + (owned ? "In library" : "Mark acquired") + '</span>' +
       '</label></article>';
   }).join("");
-  return sectionShell("Books", area.books.length, '<div class="books-grid">' + cards + '</div>', false);
+  return sectionShell("Books", area.books.length, '<div class="books-grid">' + cards + '</div>', false, chapter.anchorId, chapter.num);
 }
 
-function renderSourcesSection(area) {
+function renderSourcesSection(area, chapter) {
   if (!area.sources || !area.sources.length) return "";
-  const cards = area.sources.map(s =>
-    '<a class="source-card" href="' + escapeHTML(s.url) + '" target="_blank" rel="noopener">' +
+  const cards = area.sources.map((s, i) => {
+    const anchor = chapterItemAnchorId(area, chapter, i);
+    return '<a class="source-card" id="' + escapeHTML(anchor) + '" href="' + escapeHTML(s.url) + '" target="_blank" rel="noopener">' +
       (s.type ? '<div class="source-type">' + escapeHTML(s.type) + '</div>' : "") +
-      '<div class="source-title">' + escapeHTML(s.name) + ' →</div>' +
+      '<div class="source-title"><span class="chapter-sub-num">' + chapter.num + '.' + (i + 1) + '</span> ' + escapeHTML(s.name) + ' →</div>' +
       '<div class="source-desc">' + escapeHTML(s.description) + '</div>' +
       '<div class="source-url">' + escapeHTML(s.url) + '</div>' +
-    '</a>'
-  ).join("");
-  return sectionShell("Online Sources", area.sources.length, '<div class="sources-list">' + cards + '</div>', false);
+    '</a>';
+  }).join("");
+  return sectionShell("Online Sources", area.sources.length, '<div class="sources-list">' + cards + '</div>', false, chapter.anchorId, chapter.num);
 }
 
-function renderMatrixSection(area) {
+function renderMatrixSection(area, chapter) {
   if (!area.matrix) return "";
   const m = area.matrix;
   const headers = ["Mode"].concat(m.columns);
@@ -1186,24 +1441,25 @@ function renderMatrixSection(area) {
   const body = '<tbody>' + m.rows.map(r =>
     '<tr>' + r.map(c => '<td>' + escapeHTML(c) + '</td>').join("") + '</tr>'
   ).join("") + '</tbody>';
-  return sectionShell("Cross-Statute Matrix", m.rows.length + " modes", '<div class="matrix-wrap"><table>' + head + body + '</table></div>', false);
+  return sectionShell("Cross-Statute Matrix", m.rows.length + " modes", '<div class="matrix-wrap"><table>' + head + body + '</table></div>', false, chapter.anchorId, chapter.num);
 }
 
-function renderTemplatesSection(area) {
+function renderTemplatesSection(area, chapter) {
   if (!area.templates || !area.templates.length) return "";
-  const items = area.templates.map(t =>
-    '<details class="material-item" id="tmpl-' + escapeHTML(t.slug) + '">' +
+  const items = area.templates.map((t, i) => {
+    const anchor = chapterItemAnchorId(area, chapter, i);
+    return '<details class="material-item" id="' + escapeHTML(anchor) + '">' +
       '<summary>' +
-        '<div class="material-item-title">' + escapeHTML(t.title) + '</div>' +
+        '<div class="material-item-title"><span class="chapter-sub-num">' + chapter.num + '.' + (i + 1) + '</span> ' + escapeHTML(t.title) + '</div>' +
         '<div class="material-item-summary">' + escapeHTML(t.summary) + '</div>' +
       '</summary>' +
       '<div class="material-item-body article-body">' + t.body + '</div>' +
-    '</details>'
-  ).join("");
-  return sectionShell("Drafting Templates", area.templates.length, items, false);
+    '</details>';
+  }).join("");
+  return sectionShell("Drafting Templates", area.templates.length, items, false, chapter.anchorId, chapter.num);
 }
 
-function renderQuizSection(area) {
+function renderQuizSection(area, chapter) {
   if (!area.quiz || !area.quiz.length) return "";
   const items = area.quiz.map((q, i) => {
     const optsHTML = q.options.map((opt, oi) =>
@@ -1212,8 +1468,9 @@ function renderQuizSection(area) {
         '<span class="quiz-opt-text">' + opt + '</span>' +
       '</button>'
     ).join("");
-    return '<div class="quiz-item" data-correct="' + q.correct + '" id="quiz-' + escapeHTML(area.slug) + '-' + i + '">' +
-      '<div class="quiz-q">Q' + (i + 1) + '. ' + q.q + '</div>' +
+    const anchor = chapterItemAnchorId(area, chapter, i);
+    return '<div class="quiz-item" data-correct="' + q.correct + '" id="' + escapeHTML(anchor) + '">' +
+      '<div class="quiz-q"><span class="chapter-sub-num">' + chapter.num + '.' + (i + 1) + '</span> ' + q.q + '</div>' +
       '<div class="quiz-options">' + optsHTML + '</div>' +
       '<div class="quiz-feedback" style="display:none;">' +
         '<div class="quiz-verdict"></div>' +
@@ -1223,35 +1480,37 @@ function renderQuizSection(area) {
     '</div>';
   }).join("");
   const score = '<div class="quiz-score" data-area="' + escapeHTML(area.slug) + '" style="margin-bottom:12px;font-size:0.95rem;color:var(--ink-soft);"></div>';
-  return sectionShell("Self-Test (MCQs)", area.quiz.length, score + items, false);
+  return sectionShell("Self-Test (MCQs)", area.quiz.length, score + items, false, chapter.anchorId, chapter.num);
 }
 
-function renderFAQSection(area) {
+function renderFAQSection(area, chapter) {
   if (!area.faqs || !area.faqs.length) return "";
-  const items = area.faqs.map((f, i) =>
-    '<details class="material-item" id="faq-' + escapeHTML(area.slug) + '-' + i + '">' +
+  const items = area.faqs.map((f, i) => {
+    const anchor = chapterItemAnchorId(area, chapter, i);
+    return '<details class="material-item" id="' + escapeHTML(anchor) + '">' +
       '<summary>' +
-        '<div class="material-item-title">' + escapeHTML(f.q) + '</div>' +
+        '<div class="material-item-title"><span class="chapter-sub-num">' + chapter.num + '.' + (i + 1) + '</span> ' + escapeHTML(f.q) + '</div>' +
         '<div class="material-item-summary">' + escapeHTML(f.source) + (f.ref ? ' &middot; ' + escapeHTML(f.ref) : '') + '</div>' +
       '</summary>' +
       '<div class="material-item-body article-body">' + f.a + '</div>' +
-    '</details>'
-  ).join("");
-  return sectionShell("FAQ (from official sources)", area.faqs.length, items, false);
+    '</details>';
+  }).join("");
+  return sectionShell("FAQ (from official sources)", area.faqs.length, items, false, chapter.anchorId, chapter.num);
 }
 
-function renderExamplesSection(area) {
+function renderExamplesSection(area, chapter) {
   if (!area.examples || !area.examples.length) return "";
-  const items = area.examples.map(ex =>
-    '<details class="material-item" id="ex-' + escapeHTML(area.slug) + '-' + escapeHTML(ex.slug) + '">' +
+  const items = area.examples.map((ex, i) => {
+    const anchor = chapterItemAnchorId(area, chapter, i);
+    return '<details class="material-item" id="' + escapeHTML(anchor) + '">' +
       '<summary>' +
-        '<div class="material-item-title">' + escapeHTML(ex.title) + '</div>' +
+        '<div class="material-item-title"><span class="chapter-sub-num">' + chapter.num + '.' + (i + 1) + '</span> ' + escapeHTML(ex.title) + '</div>' +
         '<div class="material-item-summary">' + escapeHTML(ex.subject) + ' &middot; worked example</div>' +
       '</summary>' +
       '<div class="material-item-body article-body">' + ex.body + '</div>' +
-    '</details>'
-  ).join("");
-  return sectionShell("Worked Examples", area.examples.length, items, false);
+    '</details>';
+  }).join("");
+  return sectionShell("Worked Examples", area.examples.length, items, false, chapter.anchorId, chapter.num);
 }
 
 // ----- top-level renderers -----
@@ -1270,25 +1529,34 @@ function renderTabs() {
 
 function renderPanels() {
   const panels = document.getElementById("panels");
+  const renderers = {
+    'roadmap': renderWeeksSection,
+    'concepts': renderConceptsSection,
+    'topics': renderTopicsSection,
+    'note': renderDeepDiveSection,
+    'examples': renderExamplesSection,
+    'quiz': renderQuizSection,
+    'faqs': renderFAQSection,
+    'materials': renderMaterialsSection,
+    'templates': renderTemplatesSection,
+    'books': renderBooksSection,
+    'sources': renderSourcesSection,
+    'matrix': renderMatrixSection,
+  };
   let html = AREAS.map((a, i) => {
+    const chapters = buildChapters(a);
+    const chaptersHTML = chapters.map(c => {
+      const fn = renderers[c.kind];
+      return fn ? fn(a, c) : "";
+    }).join("");
     return '<section class="tab-panel ' + (i === 0 ? "active" : "") + '" id="panel-' + escapeHTML(a.slug) + '">' +
       '<div class="area-intro">' +
         '<h2>' + escapeHTML(a.title) + '</h2>' +
         '<p class="subtitle-line">' + escapeHTML(a.subtitle) + '</p>' +
         (a.summary ? '<p class="area-summary">' + escapeHTML(a.summary) + '</p>' : "") +
       '</div>' +
-      renderWeeksSection(a) +
-      renderConceptsSection(a) +
-      renderTopicsSection(a) +
-      renderDeepDiveSection(a) +
-      renderExamplesSection(a) +
-      renderQuizSection(a) +
-      renderFAQSection(a) +
-      renderMaterialsSection(a) +
-      renderTemplatesSection(a) +
-      renderBooksSection(a) +
-      renderSourcesSection(a) +
-      renderMatrixSection(a) +
+      renderTOC(a, chapters) +
+      chaptersHTML +
     '</section>';
   }).join("");
 
@@ -1660,14 +1928,58 @@ function updateProgress() {
   document.getElementById("total-count").textContent = total;
 }
 
-// Restore active tab from hash, if any
-function restoreFromHash() {
-  if (location.hash) {
-    const slug = location.hash.replace("#", "");
-    const tab = document.querySelector('[data-target="panel-' + slug + '"]');
-    if (tab) tab.click();
+// Open every <details> ancestor of an element so the element is visible.
+function openAncestors(el) {
+  let p = el && el.parentElement;
+  while (p) {
+    if (p.tagName && p.tagName.toLowerCase() === 'details') p.open = true;
+    p = p.parentElement;
   }
 }
+
+// Navigate to a hash anchor — switch to the right tab if needed, expand
+// ancestor details, scroll smoothly to the element.
+function navigateToAnchor(anchor) {
+  if (!anchor) return false;
+  // Try direct tab slug first (e.g. "ind-as")
+  const directTab = document.querySelector('[data-target="panel-' + anchor + '"]');
+  if (directTab) { directTab.click(); return true; }
+  // Otherwise, treat as deep anchor — find matching area slug as prefix
+  const knownSlugs = AREAS.map(a => a.slug).concat(['notebook', 'glossary']);
+  // Sort longer slugs first to handle overlaps (none currently, but safe)
+  knownSlugs.sort((a, b) => b.length - a.length);
+  const matchedSlug = knownSlugs.find(s => anchor === s || anchor.startsWith(s + '-'));
+  if (!matchedSlug) return false;
+  const tab = document.querySelector('[data-target="panel-' + matchedSlug + '"]');
+  if (tab) tab.click();
+  setTimeout(() => {
+    const el = document.getElementById(anchor);
+    if (el) {
+      // Open the element itself if it is a <details>
+      if (el.tagName && el.tagName.toLowerCase() === 'details') el.open = true;
+      openAncestors(el);
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 80);
+  return true;
+}
+
+function restoreFromHash() {
+  if (!location.hash) return;
+  navigateToAnchor(location.hash.substring(1));
+}
+
+// Global click handler for in-page anchor links (TOC + "↑ Back to contents")
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const hash = a.getAttribute('href').substring(1);
+  if (!hash) return;
+  if (navigateToAnchor(hash)) {
+    e.preventDefault();
+    history.replaceState(null, '', '#' + hash);
+  }
+});
 
 // Boot
 renderTabs();
