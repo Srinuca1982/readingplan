@@ -29,6 +29,28 @@ jobs:
       - name: Build planner.html into dist/
         run: python3 build.py
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Encrypt with staticrypt
+        env:
+          STATICRYPT_PASSWORD: ${{ secrets.STATICRYPT_PASSWORD }}
+        run: |
+          cd dist
+          npx --yes staticrypt index.html \
+            -p "$STATICRYPT_PASSWORD" \
+            --short \
+            -d _enc \
+            --template-title "Study Planner — Login" \
+            --template-instructions "Enter the password to access your study planner." \
+            --template-button "Unlock" \
+            --template-color-primary "#a05661" \
+            --template-color-secondary "#fbf8f1"
+          mv _enc/index.html index.html
+          rm -rf _enc
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
