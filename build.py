@@ -34,13 +34,8 @@ def main():
     html = build_planner_html()
     (dist / "index.html").write_text(html, encoding="utf-8")
 
-    # GitHub Pages custom domain marker — only write when DNS is ready.
-    # Until Cloudflare DNS exists for the custom domain, leaving this in place
-    # makes the github.io URL 301-redirect to a non-resolving host. Toggle
-    # WRITE_CNAME = True once DNS is in place.
-    WRITE_CNAME = False
-    if WRITE_CNAME:
-        (dist / "CNAME").write_text(CUSTOM_DOMAIN + "\n", encoding="utf-8")
+    # GitHub Pages custom domain marker
+    (dist / "CNAME").write_text(CUSTOM_DOMAIN + "\n", encoding="utf-8")
 
     # Belt-and-braces no-index (in addition to the meta tag in the HTML)
     (dist / "robots.txt").write_text(ROBOTS_TXT, encoding="utf-8")
