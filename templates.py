@@ -930,7 +930,10 @@ const state = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
 state.tasks = state.tasks || {};
 state.books = state.books || {};
 state.notes = state.notes || "";
-state.stats = state.stats || { tabOpens: {}, sectionOpens: {}, lastVisit: {} };
+state.stats = state.stats || {};
+state.stats.tabOpens = state.stats.tabOpens || {};
+state.stats.sectionOpens = state.stats.sectionOpens || {};
+state.stats.lastVisit = state.stats.lastVisit || {};
 
 function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
@@ -941,6 +944,7 @@ function escapeHTML(s) {
 }
 
 let materialFilter = "all";
+let glossaryFilter = "";
 
 function taskId(area, wi, ti) {
   return area.task_prefix + wi + "_t" + ti;
@@ -1110,7 +1114,7 @@ function renderTemplatesSection(area) {
 function renderExamplesSection(area) {
   if (!area.examples || !area.examples.length) return "";
   const items = area.examples.map(ex =>
-    '<details class="material-item" id="ex-' + escapeHTML(ex.slug) + '">' +
+    '<details class="material-item" id="ex-' + escapeHTML(area.slug) + '-' + escapeHTML(ex.slug) + '">' +
       '<summary>' +
         '<div class="material-item-title">' + escapeHTML(ex.title) + '</div>' +
         '<div class="material-item-summary">' + escapeHTML(ex.subject) + ' &middot; worked example</div>' +
@@ -1166,7 +1170,7 @@ function renderPanels() {
     '</div>' +
     '<section class="content-section" open style="background:transparent;border:none;box-shadow:none;">' +
       '<div class="section-body" style="padding:0;border:none;">' +
-        '<input id="glossary-search" type="search" placeholder="Search terms…" ' +
+        '<input id="glossary-search" type="search" placeholder="Search terms…" value="' + escapeHTML(glossaryFilter) + '" ' +
           'style="width:100%;padding:12px 16px;border:1px solid var(--border-soft);border-radius:10px;font:inherit;background:var(--paper);margin-bottom:14px;outline:none;" />' +
         '<div id="glossary-list"></div>' +
       '</div>' +
@@ -1208,6 +1212,14 @@ function renderPanels() {
   panels.innerHTML = html;
 }
 
+function flushPendingNotes() {
+  const notesEl = document.getElementById("notes-text");
+  if (notesEl && state.notes !== notesEl.value) {
+    state.notes = notesEl.value;
+    save();
+  }
+}
+
 function trackTabOpen(slug) {
   state.stats.tabOpens[slug] = (state.stats.tabOpens[slug] || 0) + 1;
   state.stats.lastVisit[slug] = new Date().toISOString();
@@ -1225,7 +1237,9 @@ function weekKey() {
 function renderGlossary() {
   const container = document.getElementById("glossary-list");
   if (!container) return;
-  const filter = (document.getElementById("glossary-search")?.value || "").trim().toLowerCase();
+  const searchEl = document.getElementById("glossary-search");
+  if (searchEl) glossaryFilter = searchEl.value;
+  const filter = glossaryFilter.trim().toLowerCase();
   const sorted = [...GLOSSARY].sort((a, b) => a.term.localeCompare(b.term));
   const filtered = filter
     ? sorted.filter(g =>
@@ -1358,6 +1372,7 @@ function attachHandlers() {
   // Task checkboxes
   document.querySelectorAll('.task input[type="checkbox"]').forEach(cb => {
     cb.addEventListener("change", () => {
+      flushPendingNotes();
       state.tasks[cb.dataset.id] = cb.checked;
       save();
       renderPanels();
@@ -1369,6 +1384,7 @@ function attachHandlers() {
   // Book toggles
   document.querySelectorAll('input[data-book]').forEach(cb => {
     cb.addEventListener("change", () => {
+      flushPendingNotes();
       state.books[cb.dataset.book] = cb.checked;
       save();
       renderPanels();
@@ -1379,6 +1395,7 @@ function attachHandlers() {
   // Material filters
   document.querySelectorAll('.materials-filter').forEach(btn => {
     btn.addEventListener("click", () => {
+      flushPendingNotes();
       materialFilter = btn.dataset.filter;
       renderPanels();
       attachHandlers();
@@ -1449,6 +1466,8 @@ renderTabs();
 renderPanels();
 attachHandlers();
 updateProgress();
+// Track the initial tab open (Restructuring, unless hash navigation overrides below)
+if (AREAS && AREAS.length) trackTabOpen(AREAS[0].slug);
 restoreFromHash();
 </script>
 </body>
