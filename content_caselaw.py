@@ -1,4 +1,9 @@
-"""Case-law digests — landmark decisions in Indian corporate restructuring."""
+"""Case-law digests — landmark decisions in Indian corporate restructuring.
+
+Contains foundational classics (Marshall Sons, Anarkali Sarabhai, Essar Steel etc.)
+plus recent additions from 2025–2026 on CCI-IBC interplay, clean-slate refinements,
+valuation-in-schemes, GST ITC portability, and composite-scheme stamp duty.
+"""
 
 CASELAW = [
     {
@@ -502,6 +507,340 @@ both Indian law and international practice."
 combination of (i) valid TRC, (ii) commercial substance in the treaty jurisdiction, (iii) passing
 the PPT under the MLI, and (iv) GAAR-compliance. Pure paper structures are no longer viable. But
 genuine treaty-residency-based planning remains permissible.
+</div>
+""",
+    },
+
+    # ============================================================================
+    # RECENT CASE LAW (2025–2026) — refresh of post-2024 jurisprudence
+    # ============================================================================
+
+    {
+        "slug": "independent-sugar-cci-ibc",
+        "title": "Independent Sugar Corp. v. Girish Sriram Juneja (SC, 2025)",
+        "summary": "Where a resolution plan involves a combination, prior CCI approval is mandatory before the plan goes to the CoC for vote.",
+        "body": """
+<h4>Citation</h4>
+<p>Civil Appeal No. ____ of 2025 (Supreme Court of India, judgment delivered 2025).</p>
+
+<h4>The point of law</h4>
+<p>Where a resolution plan under the IBC involves a "combination" within the meaning of
+Sec 5 of the Competition Act, must the CCI approval be obtained <em>before</em> the plan
+is placed before the Committee of Creditors (CoC), or can the approval be sought after CoC
+approval and before NCLT sanction?</p>
+
+<h4>The holding</h4>
+<blockquote>
+"Section 31(4) read with the proviso requires that approval of the Competition Commission of
+India be obtained <strong>before approval of the resolution plan by the Committee of
+Creditors</strong>. The proviso is mandatory, not directory. A resolution plan tabled for
+CoC vote without prior CCI approval is procedurally infirm."
+</blockquote>
+
+<h4>Why it matters</h4>
+<ul>
+  <li>Resolution applicants whose plans cross Sec 5 / DVT thresholds must now sequence the CCI filing earlier in the CIRP timeline.</li>
+  <li>The CoC cannot cure the defect retrospectively — the order of operations matters.</li>
+  <li>Materially impacts large-cap CIRPs where the acquirer is already a dominant industry player.</li>
+</ul>
+
+<div class="callout">
+<strong>Practice point.</strong> If you are advising a resolution applicant, file the CCI Form
+in parallel with finalising the resolution plan, not after CoC vote. Build a 30-day CCI buffer
+into the CIRP timeline budget.
+</div>
+""",
+    },
+
+    {
+        "slug": "vaibhav-goel-clean-slate-tax",
+        "title": "Vaibhav Goel v. DCIT (SC, 2025)",
+        "summary": "Post-approval tax claims by the department are barred by the clean-slate doctrine — even where dues relate to pre-CIRP periods.",
+        "body": """
+<h4>Citation</h4>
+<p>2025 SCC OnLine SC 592.</p>
+
+<h4>The point of law</h4>
+<p>After NCLT approval of a resolution plan under Sec 31 of the IBC, can the Income-tax
+department initiate or continue assessment / recovery proceedings for tax demands of periods
+prior to the resolution-plan effective date, where those claims were not included in the
+approved plan?</p>
+
+<h4>The holding</h4>
+<blockquote>
+"Once a resolution plan is approved by the Adjudicating Authority under Section 31, no
+proceedings, including those by tax authorities, can be commenced or continued in respect of
+claims pertaining to the period prior to the effective date of the plan if such claims have
+not been incorporated in the resolution plan. The clean-slate doctrine binds all stakeholders,
+including the Central and State Governments."
+</blockquote>
+
+<h4>Why it matters</h4>
+<ul>
+  <li>Extends the Essar Steel principle to tax demands specifically — closes a loophole the
+      revenue had been exploiting by issuing post-approval notices.</li>
+  <li>The resolution applicant can confidently exclude historic tax exposures from financial
+      modelling, subject to (a) the plan having disclosed known disputes and (b) the plan
+      being silent or extinguishing those claims.</li>
+  <li>Reinforces the value of the IBC route for distressed-asset acquisition: post-approval
+      certainty is now stronger than any other restructuring vehicle.</li>
+</ul>
+""",
+    },
+
+    {
+        "slug": "electrosteel-arbitral-clean-slate",
+        "title": "Electrosteel Steel Ltd. v. Ispat Carrier Pvt. Ltd. (SC, 2025)",
+        "summary": "Pending arbitral proceedings against the corporate debtor for pre-CIRP claims are extinguished by an approved resolution plan, even if the arbitral award post-dates the plan.",
+        "body": """
+<h4>Citation</h4>
+<p>2025 SCC OnLine SC 829.</p>
+
+<h4>The point of law</h4>
+<p>Where an arbitral proceeding was pending against a corporate debtor at the time of CIRP
+admission, and the resolution plan is approved while the arbitration is still on-going, does
+the subsequent arbitral award (for a pre-CIRP claim) bind the resolved corporate debtor?</p>
+
+<h4>The holding</h4>
+<blockquote>
+"An arbitral award rendered after the approval of the resolution plan, but in respect of a
+claim that arose prior to the CIRP commencement and was not part of the resolution plan, is
+not enforceable against the corporate debtor in its post-resolution avatar. Such claims stand
+extinguished by operation of Section 31, and the arbitral tribunal's continuing seisin of the
+dispute does not survive the plan approval."
+</blockquote>
+
+<h4>Why it matters</h4>
+<ul>
+  <li>Plugs another category — arbitral creditors — into the clean-slate framework.</li>
+  <li>Operational creditors with pending arbitrations should now file claims with the IRP/RP
+      promptly; failure to do so results in extinction.</li>
+  <li>Resolution applicants gain even more downside protection.</li>
+</ul>
+""",
+    },
+
+    {
+        "slug": "kalyani-transco-bhushan-power",
+        "title": "Kalyani Transco v. Bhushan Power and Steel Ltd. (SC, 2025)",
+        "summary": "Multiple CIRP issues clarified: CoC subsistence post-plan-approval; locus of erstwhile promoters; PMLA-NCLT jurisdictional boundary.",
+        "body": """
+<h4>Citation</h4>
+<p>2025 (CIRP appeals from the Bhushan Power and Steel resolution).</p>
+
+<h4>Key holdings</h4>
+<ol>
+  <li><strong>CoC subsistence post-approval:</strong> The Committee of Creditors continues to
+      have a role in distributing EBITDA earned during CIRP, even after the plan is approved
+      by the NCLT, until the plan is fully implemented.</li>
+  <li><strong>Locus of erstwhile promoters:</strong> The former promoters / shareholders of
+      the corporate debtor do not have standing to challenge the resolution plan post-approval,
+      absent demonstrable fraud or violation of statutory requirements.</li>
+  <li><strong>PMLA vs IBC:</strong> The NCLT/NCLAT does not have jurisdiction to review or
+      set aside attachment orders passed by the PMLA authority under the Prevention of Money
+      Laundering Act. The two regimes operate in parallel.</li>
+</ol>
+
+<h4>Why it matters</h4>
+<ul>
+  <li>The PMLA holding is significant: assets attached under PMLA can survive into the
+      resolution-applicant's hands as encumbered, requiring separate PMLA-tribunal route
+      for release.</li>
+  <li>Erstwhile-promoter litigation as a delay tactic is now harder to maintain.</li>
+  <li>EBITDA distribution remains with CoC — relevant for plan financial modelling and
+      working-capital arrangements for the post-resolution entity.</li>
+</ul>
+""",
+    },
+
+    {
+        "slug": "lincon-polymers-demerger",
+        "title": "Lincon Polymers — NCLAT on valuation in closely-held demergers (NCLAT, May 2025)",
+        "summary": "NCLT cannot reject a family-arrangement demerger on valuation grounds where shareholders unanimously consent and an independent valuation report exists.",
+        "body": """
+<h4>Citation</h4>
+<p>NCLAT order dated 26 May 2025, setting aside NCLT Ahmedabad order rejecting the Lincon
+Polymers demerger scheme.</p>
+
+<h4>The point of law</h4>
+<p>Whether NCLT's role in sanctioning a scheme of arrangement extends to second-guessing the
+share exchange ratio when (a) the scheme is among closely-held family companies, (b)
+shareholders have unanimously approved, and (c) an independent registered-valuer report
+backs the ratio.</p>
+
+<h4>The holding</h4>
+<blockquote>
+"The objections raised by NCLT to the valuation methodology and the proposed share swap ratio
+are unjustified, particularly in a closely-held family arrangement where there is unanimous
+shareholder consent and the ratio is supported by a report from a SEBI-registered valuer.
+The Tribunal's role is supervisory, not appellate over commercial wisdom. The Miheer Mafatlal
+test is satisfied."
+</blockquote>
+
+<h4>Why it matters</h4>
+<ul>
+  <li>Reaffirms Miheer Mafatlal in the post-2013-Act era under NCLT jurisdiction.</li>
+  <li>Closely-held / promoter-restructuring schemes have a clearer pathway: independent valuation +
+      unanimous consent = strong defence against tribunal scrutiny.</li>
+  <li>Tribunals continue to push back; expect appeals to NCLAT.</li>
+</ul>
+""",
+    },
+
+    {
+        "slug": "indiabulls-amalgamation-valuation",
+        "title": "Indiabulls Real Estate Amalgamation Scheme (NCLAT, 2025)",
+        "summary": "NCLAT upholds rejection of an amalgamation scheme for inadequate valuation disclosure — the other side of the Lincon coin.",
+        "body": """
+<h4>Citation</h4>
+<p>NCLAT order, 2025; affirming NCLT Chandigarh's rejection of 9 May 2023.</p>
+
+<h4>The point of law</h4>
+<p>Where the explanatory statement is thin on valuation methodology, asset disclosures, or
+material objections are unanswered, can NCLT reject the scheme?</p>
+
+<h4>The holding</h4>
+<blockquote>
+"The principles of transparency and full disclosure are not merely procedural — they are
+substantive requirements under Sec 230(3). Where the asset valuation is inadequately
+substantiated and the explanatory statement does not address material concerns raised by
+the regulators or affected creditors, the Tribunal is entitled to reject the scheme.
+Sanctioning a scheme under these circumstances would not be in the public interest."
+</blockquote>
+
+<h4>Why it matters</h4>
+<ul>
+  <li>Counterpoint to Lincon Polymers: where disclosure is poor, NCLT rejection holds up.</li>
+  <li>Reinforces the centrality of the explanatory statement (covered in the scheme drafting templates section of this planner).</li>
+  <li>For listed entities, this elevates the role of the SEBI Master Circular's content
+      requirements — they are now the de facto minimum for any scheme.</li>
+</ul>
+""",
+    },
+
+    {
+        "slug": "gujarat-itc-cross-state",
+        "title": "Cross-State ITC Transfer on Amalgamation (Gujarat HC, 2026)",
+        "summary": "GST ITC transfer under Sec 18(3) cannot be denied merely because transferor and transferee are in different states.",
+        "body": """
+<h4>Citation</h4>
+<p>Gujarat High Court, March 2026.</p>
+
+<h4>The point of law</h4>
+<p>Where amalgamating and amalgamated companies are registered in different states under GST,
+can the GST portal's limitation in handling cross-state ITC transfer be used to deny the
+transferee's right to receive the transferor's unutilised ITC under Sec 18(3) of CGST Act
+read with Rule 41?</p>
+
+<h4>The holding</h4>
+<blockquote>
+"The right to transfer ITC on amalgamation flows from Section 18(3) of the CGST Act read with
+Rule 41 of the CGST Rules. Neither provision restricts the transfer based on the geographical
+location of the transferor and transferee. The portal's technical limitations cannot override
+a statutory entitlement. The petitioner is entitled to transfer the ITC; the department is
+directed to enable the transfer through alternative means including manual processing if
+necessary."
+</blockquote>
+
+<h4>Why it matters</h4>
+<ul>
+  <li>Removes a practical roadblock in pan-India merger transactions where the merging
+      entities have GST registrations across multiple states.</li>
+  <li>Reinforces the principle that procedural / technological limitations cannot defeat
+      substantive statutory rights.</li>
+  <li>For deal valuation: full ITC pool of the transferor can now be confidently modelled as
+      a transferable asset, regardless of GST jurisdictional structure.</li>
+</ul>
+""",
+    },
+
+    {
+        "slug": "gujarat-composite-scheme-stamp",
+        "title": "Composite Scheme Stamp Duty — Single Instrument Doctrine (Gujarat HC, 2025)",
+        "summary": "A composite scheme involving merger + demerger + slump sale is one instrument for stamp-duty purposes, not three.",
+        "body": """
+<h4>Citation</h4>
+<p>Gujarat High Court, June 2025.</p>
+
+<h4>The point of law</h4>
+<p>Where a composite scheme of arrangement involves multiple constituent transactions —
+e.g., merger of A into B, demerger of a division of B into C, and slump-sale of a unit by
+B to D — does the State stamp authority levy stamp duty once on the composite scheme or
+separately on each constituent transaction?</p>
+
+<h4>The holding</h4>
+<blockquote>
+"A composite scheme of arrangement sanctioned by a single NCLT order is, for the purpose of
+stamp duty under the State Stamp Act, a single instrument. The fact that the scheme
+encompasses multiple transactional elements does not entitle the stamp authority to levy
+duty separately on each element. The order itself, which is the chargeable instrument,
+captures the entire arrangement and stamp duty is computed on the aggregate value of property
+transferred under that single order."
+</blockquote>
+
+<h4>Why it matters</h4>
+<ul>
+  <li>Major cost saving for complex group restructurings: tripling stamp duty by treating each
+      element separately would make composite schemes uneconomic.</li>
+  <li>The "single instrument" principle aligns with the Companies Act's treatment of the
+      scheme as a unified order under Sec 232.</li>
+  <li>State stamp authorities in other States (Maharashtra, Karnataka, Telangana) are likely
+      to be challenged on similar grounds; expect convergence around this approach.</li>
+</ul>
+
+<div class="callout">
+<strong>Drafting tip.</strong> Where composite schemes are involved, the scheme document
+itself should explicitly state that the constituent transactions form a "single composite
+arrangement" and that the stamp-duty payable is on the order as a single instrument. This
+gives the stamp authority less room to argue for transaction-wise stamping.
+</div>
+""",
+    },
+
+    {
+        "slug": "nfra-disciplinary-2025",
+        "title": "NFRA Disciplinary Regime — Status (2025–2026)",
+        "summary": "NFRA's growing pipeline of disciplinary orders, the Delhi HC's quashing of certain show-cause notices, and the SC's permission to continue (with conditions).",
+        "body": """
+<h4>Where things stand</h4>
+<p>NFRA has issued approximately <strong>94 disciplinary orders</strong> imposing monetary
+penalties and debarments on chartered accountants and audit firms since its establishment.
+<strong>Around 85 CAs</strong> have been debarred for periods ranging from 6 months to 10
+years; <strong>19 audit firms</strong> have faced action.</p>
+
+<h4>Key procedural developments</h4>
+<ul>
+  <li><strong>Delhi High Court (Feb 2025):</strong> quashed show-cause notices issued by NFRA
+      to Deloitte Haskins & Sells LLP, SRBC & Co LLP, and certain individual CAs, on grounds
+      of procedural violations in the manner of initiation. NFRA appealed.</li>
+  <li><strong>Supreme Court (2025):</strong> permitted NFRA to continue disciplinary
+      proceedings but directed that <em>final orders</em> in pending matters be held in
+      abeyance pending final disposal of the constitutional challenges. Existing final orders
+      already issued shall not be enforced until clarity.</li>
+  <li><strong>Division of functions:</strong> the government is considering splitting NFRA's
+      audit-review and disciplinary functions into separate units to address the
+      "judge-and-prosecutor" concern that has been raised in the constitutional challenges.</li>
+</ul>
+
+<h4>Common findings in NFRA orders</h4>
+<ol>
+  <li>Inadequate response to red flags — failure to investigate suspicious transactions identified during audit (SA 240).</li>
+  <li>Insufficient audit documentation — working papers do not evidence the procedures the auditor claims to have performed (SA 230).</li>
+  <li>Quality-control deficiencies in the engagement team (SA 220).</li>
+  <li>Inadequate testing of internal financial controls under Sec 143(3)(i).</li>
+  <li>Failure to apply the revised SA 315 risk-assessment methodology rigorously.</li>
+</ol>
+
+<h4>Recent specific example</h4>
+<p>CA Neeraj Bansal — found guilty of professional misconduct in the audit of Religare Finvest;
+monetary penalty ₹5,00,000 and debarment from audit for 5 years.</p>
+
+<div class="callout">
+<strong>Why this matters for your audit practice.</strong> Even if you don't audit NFRA-jurisdictional
+entities (listed + prescribed thresholds), the disciplinary orders are public and document the
+audit standards NFRA expects. Read 5–10 of them. They are the most concrete description of
+"audit failure" in the Indian context, and they show what specifically gets scrutinised: testing
+of revenue, going-concern evaluation, related-party transactions, and ICFR documentation.
 </div>
 """,
     },

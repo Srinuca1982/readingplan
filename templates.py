@@ -923,12 +923,14 @@ PLANNER_HTML = r"""<!DOCTYPE html>
 
 <script>
 const AREAS = __AREAS__;
+const GLOSSARY = __GLOSSARY__;
 
 const STORAGE_KEY = "structuring_planner_v1";
 const state = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
 state.tasks = state.tasks || {};
 state.books = state.books || {};
 state.notes = state.notes || "";
+state.stats = state.stats || { tabOpens: {}, sectionOpens: {}, lastVisit: {} };
 
 function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
@@ -1091,6 +1093,34 @@ function renderMatrixSection(area) {
   return sectionShell("Cross-Statute Matrix", m.rows.length + " modes", '<div class="matrix-wrap"><table>' + head + body + '</table></div>', false);
 }
 
+function renderTemplatesSection(area) {
+  if (!area.templates || !area.templates.length) return "";
+  const items = area.templates.map(t =>
+    '<details class="material-item" id="tmpl-' + escapeHTML(t.slug) + '">' +
+      '<summary>' +
+        '<div class="material-item-title">' + escapeHTML(t.title) + '</div>' +
+        '<div class="material-item-summary">' + escapeHTML(t.summary) + '</div>' +
+      '</summary>' +
+      '<div class="material-item-body article-body">' + t.body + '</div>' +
+    '</details>'
+  ).join("");
+  return sectionShell("Drafting Templates", area.templates.length, items, false);
+}
+
+function renderExamplesSection(area) {
+  if (!area.examples || !area.examples.length) return "";
+  const items = area.examples.map(ex =>
+    '<details class="material-item" id="ex-' + escapeHTML(ex.slug) + '">' +
+      '<summary>' +
+        '<div class="material-item-title">' + escapeHTML(ex.title) + '</div>' +
+        '<div class="material-item-summary">' + escapeHTML(ex.subject) + ' &middot; worked example</div>' +
+      '</summary>' +
+      '<div class="material-item-body article-body">' + ex.body + '</div>' +
+    '</details>'
+  ).join("");
+  return sectionShell("Worked Examples", area.examples.length, items, false);
+}
+
 // ----- top-level renderers -----
 
 function renderTabs() {
@@ -1100,6 +1130,7 @@ function renderTabs() {
       escapeHTML(a.title) +
     '</button>'
   ).join("");
+  html += '<button class="tab" data-target="panel-glossary">Glossary</button>';
   html += '<button class="tab" data-target="panel-notebook">Notebook</button>';
   tabs.innerHTML = html;
 }
@@ -1117,29 +1148,192 @@ function renderPanels() {
       renderConceptsSection(a) +
       renderTopicsSection(a) +
       renderDeepDiveSection(a) +
+      renderExamplesSection(a) +
       renderMaterialsSection(a) +
+      renderTemplatesSection(a) +
       renderBooksSection(a) +
       renderSourcesSection(a) +
       renderMatrixSection(a) +
     '</section>';
   }).join("");
 
+  // Glossary panel
+  html += '<section class="tab-panel" id="panel-glossary">' +
+    '<div class="area-intro">' +
+      '<h2>Glossary</h2>' +
+      '<p class="subtitle-line">Every term that has a precise legal or professional meaning, with the section/standard that defines it.</p>' +
+      '<p class="area-summary">' + GLOSSARY.length + ' terms. Use the search box to filter by term, definition or tag (Restructuring, Tax, Ind AS, FEMA, SEBI, Audit, Internal Audit, Labour, English).</p>' +
+    '</div>' +
+    '<section class="content-section" open style="background:transparent;border:none;box-shadow:none;">' +
+      '<div class="section-body" style="padding:0;border:none;">' +
+        '<input id="glossary-search" type="search" placeholder="Search terms…" ' +
+          'style="width:100%;padding:12px 16px;border:1px solid var(--border-soft);border-radius:10px;font:inherit;background:var(--paper);margin-bottom:14px;outline:none;" />' +
+        '<div id="glossary-list"></div>' +
+      '</div>' +
+    '</section>' +
+  '</section>';
+
   // Notebook panel
   html += '<section class="tab-panel" id="panel-notebook">' +
     '<div class="area-intro">' +
-      '<h2>Notebook</h2>' +
-      '<p class="subtitle-line">A scratchpad for case-law digests, section numbers and questions. Saves automatically in this browser.</p>' +
+      '<h2>Notebook &amp; Utilities</h2>' +
+      '<p class="subtitle-line">A scratchpad plus your local study stats and progress backup tools.</p>' +
     '</div>' +
-    '<div class="notes-pad">' +
-      '<textarea id="notes-text" placeholder="Begin writing — your notes are saved locally in this browser…"></textarea>' +
-      '<div class="notes-meta">' +
-        '<span>Auto-saved locally</span>' +
-        '<span id="word-count">0 words</span>' +
+
+    sectionShell("Notebook", null,
+      '<div class="notes-pad">' +
+        '<textarea id="notes-text" placeholder="Begin writing — your notes are saved locally in this browser…"></textarea>' +
+        '<div class="notes-meta">' +
+          '<span>Auto-saved locally</span>' +
+          '<span id="word-count">0 words</span>' +
+        '</div>' +
+      '</div>', true) +
+
+    sectionShell("Your Study Stats (local, private)", null,
+      '<div id="stats-body" style="font-size:0.95rem;color:var(--ink-soft);"></div>', false) +
+
+    sectionShell("Backup &amp; Restore Progress", null,
+      '<p style="margin-bottom:12px;">Your progress (task checkboxes, books, notes, stats) lives in this browser&rsquo;s storage. Download it as a JSON file to back up or move to another browser/device.</p>' +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
+        '<button id="btn-export" class="materials-filter active" style="border-radius:8px;padding:9px 16px;">Download progress.json</button>' +
+        '<label class="materials-filter" style="border-radius:8px;padding:9px 16px;cursor:pointer;">Import from file' +
+          '<input id="btn-import" type="file" accept="application/json" style="display:none;" />' +
+        '</label>' +
+        '<button id="btn-reset" class="materials-filter" style="border-radius:8px;padding:9px 16px;">Reset all progress…</button>' +
       '</div>' +
-    '</div>' +
+      '<div id="import-status" style="margin-top:10px;font-size:0.9rem;color:var(--ink-mute);"></div>', false) +
+
   '</section>';
 
   panels.innerHTML = html;
+}
+
+function trackTabOpen(slug) {
+  state.stats.tabOpens[slug] = (state.stats.tabOpens[slug] || 0) + 1;
+  state.stats.lastVisit[slug] = new Date().toISOString();
+  save();
+}
+
+function todayKey() { return new Date().toISOString().slice(0, 10); }
+function weekKey() {
+  const d = new Date();
+  const onejan = new Date(d.getFullYear(), 0, 1);
+  const week = Math.ceil(((d - onejan) / 86400000 + onejan.getDay() + 1) / 7);
+  return d.getFullYear() + "-W" + week;
+}
+
+function renderGlossary() {
+  const container = document.getElementById("glossary-list");
+  if (!container) return;
+  const filter = (document.getElementById("glossary-search")?.value || "").trim().toLowerCase();
+  const sorted = [...GLOSSARY].sort((a, b) => a.term.localeCompare(b.term));
+  const filtered = filter
+    ? sorted.filter(g =>
+        g.term.toLowerCase().includes(filter) ||
+        g.definition.toLowerCase().includes(filter) ||
+        (g.tags || []).some(t => t.toLowerCase().includes(filter)) ||
+        (g.source || "").toLowerCase().includes(filter))
+    : sorted;
+  if (!filtered.length) {
+    container.innerHTML = '<p style="padding:12px;color:var(--ink-mute);font-style:italic;">No matches.</p>';
+    return;
+  }
+  container.innerHTML = filtered.map(g => {
+    const tags = (g.tags || []).map(t =>
+      '<span style="display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--sage);background:var(--sage-tint);padding:2px 8px;border-radius:8px;margin-right:4px;">' + escapeHTML(t) + '</span>'
+    ).join("");
+    return '<div class="material-item" style="background:var(--paper-2);padding:14px 18px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;margin-bottom:4px;">' +
+        '<strong style="color:var(--ink);font-size:1rem;">' + escapeHTML(g.term) + '</strong>' +
+        '<span style="font-size:11px;color:var(--ink-mute);font-family:ui-monospace,monospace;">' + escapeHTML(g.source) + '</span>' +
+      '</div>' +
+      '<p style="font-size:0.93rem;color:var(--ink-soft);margin-bottom:6px;">' + escapeHTML(g.definition) + '</p>' +
+      '<div>' + tags + '</div>' +
+    '</div>';
+  }).join("");
+}
+
+function renderStats() {
+  const container = document.getElementById("stats-body");
+  if (!container) return;
+  const tabs = state.stats.tabOpens || {};
+  const entries = Object.entries(tabs).sort((a, b) => b[1] - a[1]);
+  const totalOpens = entries.reduce((s, [, n]) => s + n, 0);
+  const top = entries[0];
+  const slugToTitle = {};
+  AREAS.forEach(a => slugToTitle[a.slug] = a.title);
+  slugToTitle["glossary"] = "Glossary";
+  slugToTitle["notebook"] = "Notebook";
+  if (!entries.length) {
+    container.innerHTML = '<p style="font-style:italic;color:var(--ink-mute);">No activity tracked yet. Open tabs to start.</p>';
+    return;
+  }
+  let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:16px;">';
+  html += '<div style="padding:12px 14px;background:var(--accent-tint);border-radius:8px;"><div style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent-deep);font-weight:600;">Total tab opens</div><div style="font-size:1.4rem;font-weight:700;">' + totalOpens + '</div></div>';
+  if (top) {
+    html += '<div style="padding:12px 14px;background:var(--gold-tint);border-radius:8px;"><div style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);font-weight:600;">Most visited</div><div style="font-size:1rem;font-weight:700;">' + escapeHTML(slugToTitle[top[0]] || top[0]) + '</div><div style="font-size:0.85rem;color:var(--ink-mute);">' + top[1] + ' opens</div></div>';
+  }
+  html += '</div>';
+  html += '<table style="width:100%;border-collapse:collapse;font-size:0.93rem;">' +
+    '<thead><tr><th style="text-align:left;padding:8px;border-bottom:1px solid var(--border-soft);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-soft);">Subject</th>' +
+    '<th style="text-align:right;padding:8px;border-bottom:1px solid var(--border-soft);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-soft);">Opens</th>' +
+    '<th style="text-align:left;padding:8px;border-bottom:1px solid var(--border-soft);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-soft);">Last visit</th></tr></thead><tbody>';
+  entries.forEach(([slug, n]) => {
+    const last = state.stats.lastVisit[slug];
+    const lastTxt = last ? new Date(last).toLocaleString() : "—";
+    html += '<tr><td style="padding:8px;border-bottom:1px solid var(--border-soft);">' + escapeHTML(slugToTitle[slug] || slug) +
+      '</td><td style="padding:8px;text-align:right;border-bottom:1px solid var(--border-soft);font-variant-numeric:tabular-nums;">' + n +
+      '</td><td style="padding:8px;border-bottom:1px solid var(--border-soft);color:var(--ink-mute);font-size:0.85rem;">' + escapeHTML(lastTxt) + '</td></tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+function exportProgress() {
+  const data = JSON.stringify({
+    exportedAt: new Date().toISOString(),
+    version: 1,
+    state: state,
+  }, null, 2);
+  const blob = new Blob([data], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "study-planner-progress-" + todayKey() + ".json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importProgress(file) {
+  const status = document.getElementById("import-status");
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const payload = JSON.parse(e.target.result);
+      if (!payload || !payload.state) throw new Error("File does not contain valid progress data.");
+      Object.assign(state, payload.state);
+      state.tasks = state.tasks || {};
+      state.books = state.books || {};
+      state.notes = state.notes || "";
+      state.stats = state.stats || { tabOpens: {}, sectionOpens: {}, lastVisit: {} };
+      save();
+      status.style.color = "var(--sage)";
+      status.textContent = "✓ Imported successfully. Refreshing…";
+      setTimeout(() => location.reload(), 800);
+    } catch (err) {
+      status.style.color = "var(--accent)";
+      status.textContent = "✗ Import failed: " + err.message;
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetProgress() {
+  if (!confirm("This will delete ALL your progress (checkboxes, books, notes, stats). This cannot be undone unless you previously exported a backup. Continue?")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
 }
 
 function attachHandlers() {
@@ -1151,6 +1345,12 @@ function attachHandlers() {
       tab.classList.add("active");
       const target = document.getElementById(tab.dataset.target);
       if (target) target.classList.add("active");
+      // Track tab open for stats
+      const slug = (tab.dataset.target || "").replace(/^panel-/, "");
+      if (slug) trackTabOpen(slug);
+      // Refresh stats / glossary if relevant
+      if (slug === "notebook") renderStats();
+      if (slug === "glossary") renderGlossary();
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   });
@@ -1200,6 +1400,24 @@ function attachHandlers() {
       saveTimer = setTimeout(save, 350);
     });
   }
+
+  // Export / Import / Reset
+  const exportBtn = document.getElementById("btn-export");
+  if (exportBtn) exportBtn.addEventListener("click", exportProgress);
+  const importInput = document.getElementById("btn-import");
+  if (importInput) importInput.addEventListener("change", e => {
+    if (e.target.files && e.target.files[0]) importProgress(e.target.files[0]);
+  });
+  const resetBtn = document.getElementById("btn-reset");
+  if (resetBtn) resetBtn.addEventListener("click", resetProgress);
+
+  // Glossary search
+  const glossarySearch = document.getElementById("glossary-search");
+  if (glossarySearch) glossarySearch.addEventListener("input", renderGlossary);
+
+  // First-load population for glossary/stats so a direct hash link works
+  renderGlossary();
+  renderStats();
 }
 
 function updateProgress() {

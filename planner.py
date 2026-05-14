@@ -24,6 +24,9 @@ from content_cheatsheets import CHEATSHEETS
 from content_caselaw import CASELAW
 from content_mastery import AREAS as MASTERY_AREAS
 from content_mastery_notes import MASTERY_NOTES
+from content_glossary import GLOSSARY
+from content_templates import TEMPLATES
+from content_examples import EXAMPLES
 from templates import PLANNER_HTML
 
 
@@ -60,6 +63,11 @@ def build_areas():
             "slug": "case-" + c["slug"],
         })
 
+    # Worked examples grouped by subject
+    examples_by_subject = {}
+    for ex in EXAMPLES:
+        examples_by_subject.setdefault(ex["subject"], []).append(ex)
+
     areas = [{
         "slug": "restructuring",
         "title": "Restructuring",
@@ -74,6 +82,11 @@ def build_areas():
         "weeks": WEEKS,
         "concepts": CONCEPTS,
         "materials": materials,
+        "templates": TEMPLATES,
+        "examples": (
+            examples_by_subject.get("Restructuring", []) +
+            examples_by_subject.get("Tax", [])
+        ),
         "matrix": MATRIX,
         "books": BOOKS,
         "sources": SOURCES,
@@ -81,8 +94,15 @@ def build_areas():
 
     notes_by_slug = {n["slug"]: n for n in MASTERY_NOTES}
 
+    # Map mastery slug → which examples subject feeds it
+    examples_subject_for = {
+        "ind-as": "Ind AS",
+        "it-act-2025": "Tax",
+    }
+
     for i, ma in enumerate(MASTERY_AREAS):
         note = notes_by_slug.get(ma["slug"], {})
+        subj = examples_subject_for.get(ma["slug"])
         areas.append({
             "slug": ma["slug"],
             "title": ma["title"],
@@ -92,6 +112,7 @@ def build_areas():
             "weeks": ma["weeks"],
             "topics": ma["topics"],
             "note_body": note.get("body", ""),
+            "examples": examples_by_subject.get(subj, []) if subj else [],
             "books": ma["books"],
             "sources": ma["sources"],
         })
@@ -100,7 +121,9 @@ def build_areas():
 
 
 def build_planner_html():
-    return PLANNER_HTML.replace("__AREAS__", safe_json(build_areas()))
+    return (PLANNER_HTML
+            .replace("__AREAS__", safe_json(build_areas()))
+            .replace("__GLOSSARY__", safe_json(GLOSSARY)))
 
 
 def find_target_dir():
@@ -121,6 +144,7 @@ def find_target_dir():
 
 SOURCE_FILES = [
     "planner.py",
+    "build.py",
     "content_roadmap.py",
     "content_concepts.py",
     "content_notes.py",
@@ -128,6 +152,9 @@ SOURCE_FILES = [
     "content_caselaw.py",
     "content_mastery.py",
     "content_mastery_notes.py",
+    "content_glossary.py",
+    "content_templates.py",
+    "content_examples.py",
     "templates.py",
 ]
 
